@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  color: white;
+}
+body{
+  overflow-x:hidden;
+}
+li{
+  list-style-type: none;
+  text-decoration: none;
+}
+/* ------------------ Navbar ------------ */
+.mobile-ul{
+  transition:  height 200ms  0ms, opacity 10ms 210ms;
+}
+.desktop-hover-effect li a{
+  position: relative;
+}
+.desktop-hover-effect li  a::after{
+  content: '';
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  position: absolute;
+  left:0;
+  bottom: -5px;
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 300ms;
+}
+.desktop-hover-effect li a:hover::after{
+ transform: scaleX(1);
+}
+
+/* Responsive font-size */
+@media (max-width:800px) {
+  html{
+    font-size: 14px;
+  }
+}
