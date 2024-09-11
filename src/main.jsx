@@ -13,9 +13,11 @@ import {
   } from 'react-router-dom';
 import MainLayout from './MainLayout/MainLayout.jsx';
 import Home from './Pages/Home/Home.jsx';
+import Allproducts from './Pages/HomeLiving/Allproducts.jsx'
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>  
     <Route index element={<Home/>}/> 
+    <Route path='store' element={<Allproducts/>}/>
     <Route path='men-fashion' element={<Men/>}/> 
     <Route path='women-fashion' element={<Women/>}/> 
     </Route>

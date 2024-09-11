@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import {  NavLink } from "react-router-dom";
 import {
   AiOutlineHeart,
   AiOutlineSearch,
@@ -25,13 +25,13 @@ const Navbar = () => {
       {/* for mobile & tablets */}
       <ul className={`flex gap-3 sm:hidden mobile-ul ${isOppen ? 'flex opacity-100 h-[150px] pointer-events-auto' : " h-0 pointer-events-none opacity-0"} absolute flex-col bg-black w-full left-0 top-[100%] p-3`}>
         <li>
-          <Link to={"home"}>Home</Link>
+          <NavLink to={"home"}>Home</NavLink>
         </li>
         <li>
-          <Link to={"men-fashion"}>Men's Fashion</Link>
+          <NavLink to={"men-fashion"}>Men's Fashion</NavLink>
         </li>
         <li>
-          <Link to={"women-fashion"}>Women's Fashion</Link>
+          <NavLink to={"women-fashion"}>Women's Fashion</NavLink>
         </li>
         <div className="actions sm:hidden flex justify-start gap-4">
           <AiOutlineSearch  size={25}/>
@@ -41,13 +41,13 @@ const Navbar = () => {
       </ul>
       <ul className={`desktop-hover-effect sm:flex hidden gap-3 relative p-2 text-sm font-light`}>
         <li>
-          <Link to={"/"}>Home</Link>
+          <NavLink to={"/"}>Home</NavLink>
         </li>
         <li>
-          <Link to={"men-fashion"}>Men's Fashion</Link>
+          <NavLink to={"men-fashion"}>Men's Fashion</NavLink>
         </li>
         <li>
-          <Link to={"women-fashion"}>Women's Fashion</Link>
+          <NavLink to={"women-fashion"}>Women's Fashion</NavLink>
         </li>
         <div className="actions sm:hidden flex justify-start gap-4">
           <AiOutlineSearch  size={25} className="cursor-pointer"/>
@@ -56,7 +56,7 @@ const Navbar = () => {
         </div>
       </ul>
         <div className="logo w-[200px] max-w-[350px] md:self-center">
-         <Link to={'/'}> <img src={logo} alt="logo" /></Link>
+         <NavLink to={'/'}> <img src={logo} alt="logo" /></NavLink>
         </div>
         <div className="flex gap-3">
           <AiOutlineSearch size={25} className="cursor-pointer"/>
