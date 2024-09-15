@@ -10,16 +10,28 @@ import {
    createRoutesFromElements,
    RouterProvider ,
    Route
-  } from 'react-router-dom';
+  } 
+  from 'react-router-dom';
 import MainLayout from './MainLayout/MainLayout.jsx';
 import Home from './Pages/Home/Home.jsx';
-import Allproducts from './Pages/HomeLiving/Allproducts.jsx'
+import Allproducts from './Pages/HomeLiving/Allproducts.jsx';
+import Login from './Pages/Auth/Login.jsx';
+import Signup
+ from './Pages/Auth/Signup.jsx';
+ import Profile from './Pages/Profile/Profile.jsx'
+import Cart from './Pages/Cart/Cart.jsx'
+import WishList from './Pages/WishList/WishList.jsx'
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>  
     <Route index element={<Home/>}/> 
     <Route path='store' element={<Allproducts/>}/>
     <Route path='men-fashion' element={<Men/>}/> 
     <Route path='women-fashion' element={<Women/>}/> 
+    <Route path='Login' element={<Login/>}/> 
+    <Route path='signup' element={<Signup/>}/>
+    <Route path='profile' element={<Profile/>}/>
+    <Route path='cart' element={<Cart/>}/>
+    <Route path='wishlist' element={<WishList/>}/>
     </Route>
   ))
 
