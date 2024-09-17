@@ -6,7 +6,6 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 const Carousel = ({images}) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -18,9 +17,7 @@ const Carousel = ({images}) => {
     };
   }, []);
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
+ 
   return (
     <div className="w-full md:px-4 py-5 overflow-hidden">
     <Swiper

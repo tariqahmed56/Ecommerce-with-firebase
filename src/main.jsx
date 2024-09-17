@@ -21,6 +21,9 @@ import Signup
  import Profile from './Pages/Profile/Profile.jsx'
 import Cart from './Pages/Cart/Cart.jsx'
 import WishList from './Pages/WishList/WishList.jsx'
+import Active from './Pages/Profile/Active.jsx'
+import Settings from './Pages/Profile/Settings.jsx'
+import Orders from './Pages/Profile/Orders.jsx'
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>  
     <Route index element={<Home/>}/> 
@@ -29,7 +32,11 @@ import WishList from './Pages/WishList/WishList.jsx'
     <Route path='women-fashion' element={<Women/>}/> 
     <Route path='Login' element={<Login/>}/> 
     <Route path='signup' element={<Signup/>}/>
-    <Route path='profile' element={<Profile/>}/>
+    <Route path='profile' element={<Profile/>}>
+    <Route index element={<Active/>}/>
+    <Route path='settings' element={<Settings/>}/>
+    <Route path='orders' element={<Orders/>}/>
+    </Route>
     <Route path='cart' element={<Cart/>}/>
     <Route path='wishlist' element={<WishList/>}/>
     </Route>
