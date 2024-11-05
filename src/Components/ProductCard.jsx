@@ -2,8 +2,10 @@ import React from 'react'
 import product from '../assets/dummyProduct.webp'
 import { AiOutlineHeart } from 'react-icons/ai'
 import { FaCartArrowDown, FaCartPlus } from 'react-icons/fa6'
+import { Link } from 'react-router-dom'
 const ProductCard = ({imgUrl,discount,brand,title,isShippingFree,originalPrice,actualPrice}) => {
   return (
+    <Link to={'/single'}>
     <div className='flex flex-col w-[180px] relative h-[340px] object-cover cursor-pointer '>
       <AiOutlineHeart className='absolute top-1 right-1 z-50 text-white cursor-pointer' size={25}/>
       <div className="imgContainer bg-gray-400 h-[75%] relative group overflow-hidden">
@@ -19,6 +21,7 @@ const ProductCard = ({imgUrl,discount,brand,title,isShippingFree,originalPrice,a
         <p className='originalPrice text-[13px]  line-through'>4500</p>
       </div>
     </div>
+    </Link>
   )
 }
 

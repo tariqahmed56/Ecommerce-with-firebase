@@ -31,3 +31,9 @@ eslint.config.js
 postcss.config.js
 tailwind.config.js
 vite.config.js
+
+# Ignore environment variables
+.env
+
+# Ignore Firebase configuration
+firebaseConfig.js

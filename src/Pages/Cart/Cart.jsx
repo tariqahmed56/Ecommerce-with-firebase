@@ -15,10 +15,10 @@ const Cart = () => {
   return (
    <div className="cart container mx-auto text-black min-h-[90dvh] gap-3 grid md:grid-cols-3 py-3">
       <div className="Cart-Products col-span-2 p-3 bg-[#a7a6a6]">
-        <div className="Product flex flex-wrap gap-2 justify-start items-start shadow-md px-[20px] py-2  bg-white">
+        <div className="Product flex flex-wrap gap-2 justify-start items-start shadow-md px-[20px] py-1  bg-white">
             
-          <div className="img relative">
-           <img src={dummyProduct} alt="Products" className='w-[100px] h-[100px]' />
+          <div className="img relative w-[100px] h-[100px] flex justify-center items-center">
+           <img src={dummyProduct} alt="Products" className='w-[40px] h-[40px] object-cover' />
           </div>
           <div className="Data flex flex-col gap-y-2 justify-start items-start px-2">
           <div className="title flex justify-start items-start text-sm">

@@ -36,8 +36,8 @@ const Carousel = ({images}) => {
       slidesPerView={1}
     >
         {
-            images.map((img)=>(
-      <SwiperSlide className="shrink-0 w-full md:w-[70%] flex justify-center rounded-lg">
+            images.map((img,idx)=>(
+      <SwiperSlide className="shrink-0 w-full md:w-[70%] flex justify-center rounded-lg" key={idx}>
         <img
           src={img}
           alt="men-style"

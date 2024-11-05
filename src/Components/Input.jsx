@@ -13,18 +13,21 @@ const Input = ({
 }) => {
   return (
     <div className={`mb-1 ${className}`}>
-      {label && <label className=" text-sm font-medium mb-2 flex justify-start items-center gap-1">
-      <input
+      {label && <label className=" text-sm font-medium mb-2 flex justify-start gap-1 appearence-none">
+{  
+     type === 'password' || type === 'email' ? <span className='block'>{label}</span> : ''
+}      <input
         type={type}
         value={value}
-        onChange={onChange}
+        onChange={(e)=>onChange(e)}
         placeholder={placeholder}
         disabled={disabled}
         name={name}
-        className={` px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
+        className={` px-3 py-2 border rounded-md focus:outline-none appearance-auto  ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
         {...rest}
       />
-      {label}
+           { type === 'checkbox' ? <span className='block'>{label}</span> : ''}
+
       </label>}
     </div>
   );

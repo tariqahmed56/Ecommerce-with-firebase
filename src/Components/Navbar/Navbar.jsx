@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {  NavLink } from "react-router-dom";
 import {
   AiOutlineHeart,
@@ -10,12 +10,19 @@ import {
 import logo from '../../assets/logo.jpeg'
 import { FaBars,FaCircleXmark , FaXmark , FaUser , FaSearchengin, FaBagShopping} from "react-icons/fa6";
 import { FaShoppingBag } from "react-icons/fa";
+import { useAuth } from "../../contexts/AuthContext";
 const Navbar = () => {
+  const {user,ObserveAuthState} = useAuth();
   const [isOppen, setIsOppen] = useState(false);
-  const [isLoggedIn,setIsLoggedIn] = useState(false)
+  const [isLoggedIn,setIsLoggedIn] = useState(false);
+
   const toggleNavbar = () => {
     setIsOppen(prev=>!prev)
   }
+  useEffect(()=>{
+    ObserveAuthState();
+    console.log(user)
+  },[])
   return (
     <nav className="h-[64px] bg-black flex justify-between lg:px-6 items-center px-4 py-2 relative">
       {isOppen ? (
@@ -27,7 +34,7 @@ const Navbar = () => {
       {/* for mobile & tablets */}
       <ul className={`flex gap-3 sm:hidden mobile-ul ${isOppen ? 'flex opacity-100 h-[150px] pointer-events-auto' : " h-0 pointer-events-none opacity-0"} z-50 absolute flex-col bg-black w-full left-0 top-[100%] p-3`}>
         <li>
-          <NavLink to={"home"}>Home</NavLink>
+          <NavLink to={"/"}>Home</NavLink>
         </li>
         <li>
           <NavLink to={"men-fashion"}>Men's Fashion</NavLink>
@@ -45,7 +52,7 @@ const Navbar = () => {
           </NavLink>
         </li>
        {
-        !isLoggedIn &&
+        !user &&
         <li>
           <NavLink to={''}>
           <FaBagShopping size={20} className="text-white"/>
@@ -70,7 +77,7 @@ const Navbar = () => {
           isLoggedIn ? <NavLink to={'profile'}><FaUser/></NavLink> : <NavLink to={'login'}>Login</NavLink>
           }
            {
-          isLoggedIn ? <NavLink to={'cart'}><FaShoppingBag size={25}/></NavLink> : null
+          user ? <NavLink to={'cart'}><FaShoppingBag size={25}/></NavLink> : null
           }
 
         </div>
@@ -82,13 +89,13 @@ const Navbar = () => {
           <AiOutlineSearch size={20} className="cursor-pointer"/>
           <AiOutlineHeart size={20} className="cursor-pointer"/>
           {
-          !isLoggedIn 
+          user 
           && 
            <NavLink to={'cart'}>
             <FaBagShopping className="cursor-pointer text-white" size={23}/>  
           </NavLink>
           }
-          {!isLoggedIn ? <NavLink to={'profile'}><FaUser size={25}/></NavLink> : <NavLink to={'login'}>Login</NavLink>}
+          {user ? <NavLink to={'profile'}><FaUser size={25}/></NavLink> : <NavLink to={'login'}>Login</NavLink>}
 
         </div>
     </nav>

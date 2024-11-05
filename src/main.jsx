@@ -24,14 +24,19 @@ import WishList from './Pages/WishList/WishList.jsx'
 import Active from './Pages/Profile/Active.jsx'
 import Settings from './Pages/Profile/Settings.jsx'
 import Orders from './Pages/Profile/Orders.jsx'
+import SingleProduct from './Pages/SingleProductPage/SingleProduct.jsx'
+import AdminLayout from './Pages/AdminPanel/AdminLayout.jsx'
+import Dashboard from './Pages/AdminPanel/Dashboard.jsx'
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>  
     <Route index element={<Home/>}/> 
     <Route path='store' element={<Allproducts/>}/>
     <Route path='men-fashion' element={<Men/>}/> 
     <Route path='women-fashion' element={<Women/>}/> 
+    <Route path='single' element={<SingleProduct/>} />
     <Route path='Login' element={<Login/>}/> 
     <Route path='signup' element={<Signup/>}/>
+
     <Route path='profile' element={<Profile/>}>
     <Route index element={<Active/>}/>
     <Route path='settings' element={<Settings/>}/>
@@ -39,11 +44,14 @@ import Orders from './Pages/Profile/Orders.jsx'
     </Route>
     <Route path='cart' element={<Cart/>}/>
     <Route path='wishlist' element={<WishList/>}/>
+    <Route path='admin-panel' element={<AdminLayout/>}>
+    <Route index element={<Dashboard/>}/>
+    </Route>
     </Route>
   ))
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
    <RouterProvider router={router}></RouterProvider>
-  </StrictMode>,
+  </StrictMode>
 )

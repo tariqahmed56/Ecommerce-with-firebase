@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { FaChevronDown } from 'react-icons/fa6';
 // styling of this component are inside index.css 
 const PriceRange = ({ min, max, step, gap, onChange }) => {
   const [minValue, setMinValue] = useState(min);
@@ -32,10 +33,14 @@ const PriceRange = ({ min, max, step, gap, onChange }) => {
     setMaxValue(value);
     onChange({ min: minValue, max: value });
   };
+  const [priceDropdown,setpriceDropdown]=useState(false);
+  const handlepriceDropdown = () => setpriceDropdown(!priceDropdown);
 
   return (
-    <div className="">
-      <h2 className='font-bold mb-10'> Price Range</h2>
+    <div className="py-2 mt-2 border-t-[2px] border-black">
+      <h2 className='font-semibold text-sm justify-between flex items-center py-2' onClick={handlepriceDropdown}> Price Range 
+         <span className={`text-xl transform ${priceDropdown ? 'rotate-180': 'rotate-0'} `}><FaChevronDown size={15}/></span></h2>
+  { priceDropdown && 
     <div className="slider-container">
       <input
         type="range"
@@ -64,6 +69,7 @@ const PriceRange = ({ min, max, step, gap, onChange }) => {
         <div className="slider-right-value">{maxValue}</div>
       </div>
     </div>
+    }
     </div>
   );
 };
