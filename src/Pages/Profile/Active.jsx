@@ -14,7 +14,7 @@ const Active = () => {
   <span className="w-[90%] h-[2px] bg-[#725b5b] block mx-auto"></span>
   <div className="flex justify-between px-4">
     <h1>Email</h1>
-    <h3 className="font-normal">{user.email}</h3>
+    <h3 className="font-normal">{user?.email}</h3>
   </div>
   <span className="w-[90%] h-[2px] bg-[#725b5b] block mx-auto"></span>
   <div className="flex justify-between px-4">

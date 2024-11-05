@@ -32,8 +32,6 @@ postcss.config.js
 tailwind.config.js
 vite.config.js
 
-# Ignore environment variables
+# Ignore environment and configuration files
 .env
-
-# Ignore Firebase configuration
-firebaseConfig.js
+src/config/firebaseconfig.js
