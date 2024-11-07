@@ -1,22 +1,45 @@
-import React, { useContext, useEffect } from 'react'
-import profile from '../../assets/defaultProfile.jpg'
-import { Link } from 'react-router-dom'
-import { Outlet } from 'react-router-dom'
-const Profile = () => {
- 
-  return (
-    <div className='container mx-auto Profile flex flex-col justify-center items-center text-sm text-black h-[90dvh]'>
-      <img src={profile} alt="Profile photo" className='h-[150px] aspect-square rounded-full' />
-      <div className="container flex min-w-[300px] max-w-[70vw] min-h-[50dvh] rounded px-5 py-3 gap-4 ">
-        <div className="UserProfileSideBar py-2 w-[100px] overflow-x-hidden md:basis-1/4 rounded-md shadow-md flex flex-col gap-5 border-2 border-yellow-300">
-         <Link to={'.'} className='px-3 font-medium cursor-pointer'>Contacts</Link>
-         <Link to={'settings'} className='px-3 font-medium cursor-pointer' >Account Settings</Link>
-         <Link to={'orders'} className='px-3 font-medium cursor-pointer'>Orders</Link>
-        </div>
-        <Outlet/>
-      </div>
-    </div>
-  )
-}
+import React, { useContext } from 'react';
+import profile from '../../assets/defaultProfile.jpg';
+import { Link, Outlet } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
-export default Profile
+const Profile = () => {
+  const { LogOut , user } = useContext(AuthContext);
+
+  return (
+    <div className="container  mx-auto flex flex-col justify-center items-center text-sm text-gray-800 min-h-[90vh] py-10 px-4">
+      <div className="flex flex-col items-center">
+        <img src={profile} alt="Profile photo" className="h-[150px] w-[150px] rounded-full border-4 border-gray-300 shadow-md" />
+        <h1 className="mt-4 text-xl font-semibold">{user ? user.email : "Welcome"}</h1>
+        <button
+        className="mt-6 px-5 py-2 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-red-600 transition-all duration-200 ease-in-out"
+        onClick={LogOut}
+      >
+        Sign Out
+      </button>
+      </div>
+
+      <div className="container flex flex-col md:flex-row min-w-[300px] max-w-[90vw] min-h-[60vh] mt-6 rounded-lg shadow-lg overflow-hidden">
+        <div className="UserProfileSideBar md:w-1/4 bg-gray-100 p-4 flex flex-col gap-4 text-gray-700 border-r-2 border-gray-200 shadow-inner">
+          <Link to="." className="px-4 py-2 font-medium text-gray-700 hover:bg-gray-200 hover:text-black rounded-lg">
+            Contacts
+          </Link>
+          <Link to="settings" className="px-4 py-2 font-medium text-gray-700 hover:bg-gray-200 hover:text-black rounded-lg">
+            Account Settings
+          </Link>
+          <Link to="orders" className="px-4 py-2 font-medium text-gray-700 hover:bg-gray-200 hover:text-black rounded-lg">
+            Orders
+          </Link>
+        </div>
+
+        <div className="p-6 flex-1">
+          <Outlet />
+        </div>
+      </div>
+
+     
+    </div>
+  );
+};
+
+export default Profile;

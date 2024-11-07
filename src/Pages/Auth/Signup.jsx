@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import Input from '../../Components/Input'
 import Button from '../../Components/Button'
 import { Link } from 'react-router-dom'
-import {createUserWithEmailAndPassword} from 'firebase/auth'
-import { auth } from '../../config/firebaseconfig'
 import { useAuth } from '../../contexts/AuthContext'
 const Signup = () => {
   const {CreateAccount} = useAuth();
@@ -21,10 +19,7 @@ const Signup = () => {
       return updatedState;
     })
   }
-  const handleResgisterAccount =async (e) =>{
-    e.preventDefault();
-    CreateAccount(formData.email,formData.password)
-  }
+
   return (
     <div className='h-[90dvh] text-black flex justify-center items-center'>
     <div className="login shadow-md px-5 py-2">
@@ -36,8 +31,7 @@ const Signup = () => {
 {/* <p className="text-red-500 text-xl font-bold mb-2"></p> */}
 
 <div className="text-center">
-<Button text={'Create Account'} onClickhandler={(e)=>handleResgisterAccount(e)}/>
-  
+<button onClick={()=>CreateAccount(formData.email,formData.password)}>Create Account</button>  
   <h3 className="text-xl font-bold mt-4 p-0">already have an Account?</h3>
   
   <Link

@@ -10,7 +10,7 @@ import {
 import { auth } from "../../config/firebaseconfig";
 import { useAuth } from "../../contexts/AuthContext";
 const Login = () => {
-  const { LoginUser } = useAuth();
+  const { LoginUser , setUser , user , fetchUserById} = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -28,16 +28,24 @@ const Login = () => {
   };
   const handleLogin = async (e) => {
     LoginUser(formData.email, formData.password);
+    console.log(formData)
   };
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        console.log(user.uid);
-      } else {
-        alert("no user");
-      }
-    });
-  }, []);
+  let uid = "";
+  useEffect(()=>{
+   onAuthStateChanged(auth,available=>{
+     if(available){           
+         uid=available.uid;
+     }else{
+         setUser(null)
+     }
+ })
+  },[]);
+  useEffect(()=>{
+   if(user){
+   console.log(user)
+     fetchUserById(user.uid) ;    
+   }
+  },[user?.uid])
   return (
     <div className="h-[90dvh] text-black flex justify-center items-center">
       <div className="login shadow-md px-5 py-2">

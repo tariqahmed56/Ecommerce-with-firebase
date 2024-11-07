@@ -33,6 +33,8 @@ import AddProduct from './Pages/AdminPanel/Product/AddProduct.jsx'
 import ProductList from './Pages/AdminPanel/Product/ProductList.jsx'
 import AddCategory from './Pages/AdminPanel/Categories/AddCategory.jsx'
 import CategoryList from './Pages/AdminPanel/Categories/CategoryList.jsx'
+import ForLoggedInUser from './Components/Protection/ForLoggedInUser.jsx'
+import PrivateRoutes from './Components/Protection/PrivateRoutes.jsx'
 
   const router = createBrowserRouter(createRoutesFromElements(
     <Route path='/' element={<MainLayout/>}>  
@@ -43,14 +45,16 @@ import CategoryList from './Pages/AdminPanel/Categories/CategoryList.jsx'
     <Route path='single' element={<SingleProduct/>} />
     <Route path='Login' element={<Login/>}/> 
     <Route path='signup' element={<Signup/>}/>
-
+    <Route element={<ForLoggedInUser/>}>
     <Route path='profile' element={<Profile/>}>
     <Route index element={<Active/>}/>
     <Route path='settings' element={<Settings/>}/>
     <Route path='orders' element={<Orders/>}/>
     </Route>
+    </Route>
     <Route path='cart' element={<Cart/>}/>
     <Route path='wishlist' element={<WishList/>}/>
+    <Route element={<PrivateRoutes/>}>
     <Route path='admin-panel' element={<AdminLayout/>}>
     <Route index element={<Dashboard/>}/>
     <Route path='orders' element={<AdminOrders/>}/>
@@ -59,6 +63,7 @@ import CategoryList from './Pages/AdminPanel/Categories/CategoryList.jsx'
     <Route path='product-list' element={<ProductList/>}/>
     <Route path='add-category' element={<AddCategory/>}/>
     <Route path='category-list' element={<CategoryList/>}/>
+    </Route>
     </Route>
     </Route>
   ))

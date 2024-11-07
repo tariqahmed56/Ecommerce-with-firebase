@@ -9,11 +9,12 @@ const Input = ({
   className = '',
   disabled = false,
   name,
+  width,
   ...rest 
 }) => {
   return (
     <div className={`mb-1 ${className}`}>
-      {label && <label className=" text-sm font-medium mb-2 flex justify-start gap-1 appearence-none">
+      {label && <label className=" text-sm font-medium mb-2 flex justify-start gap-1 appearence-none cursor-pointer">
 {  
      type === 'password' || type === 'email' ? <span className='block'>{label}</span> : ''
 }      <input
@@ -23,7 +24,7 @@ const Input = ({
         placeholder={placeholder}
         disabled={disabled}
         name={name}
-        className={` px-3 py-2 border rounded-md focus:outline-none appearance-auto  ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
+        className={` px-3 py-2 cursor-pointer border rounded-md focus:outline-none appearance-auto ${width ? width : ""} cursor-pointer  ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''}`}
         {...rest}
       />
            { type === 'checkbox' ? <span className='block'>{label}</span> : ''}

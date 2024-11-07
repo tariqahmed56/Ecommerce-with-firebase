@@ -11,7 +11,7 @@ const AdminNav = () => {
   const toggleProducts = () => setProductsOpen(!isProductsOpen);
 
   return (
-    <div className="Admin-Sidebar basis-[150px]  bg-[#1E293B] px-4 py-2 flex flex-col items-center">
+    <div className="Admin-Sidebar basis-[250px]  bg-[#1E293B] px-4 py-2 flex flex-col items-center">
       <img src={logo} alt="logo" className="mb-1 h-12 w-auto object-contain" />
 
       <nav className="w-full flex flex-col gap-3">
