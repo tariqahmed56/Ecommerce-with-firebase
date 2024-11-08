@@ -30,22 +30,7 @@ const Login = () => {
     LoginUser(formData.email, formData.password);
     console.log(formData)
   };
-  let uid = "";
-  useEffect(()=>{
-   onAuthStateChanged(auth,available=>{
-     if(available){           
-         uid=available.uid;
-     }else{
-         setUser(null)
-     }
- })
-  },[]);
-  useEffect(()=>{
-   if(user){
-   console.log(user)
-     fetchUserById(user.uid) ;    
-   }
-  },[user?.uid])
+  
   return (
     <div className="h-[90dvh] text-black flex justify-center items-center">
       <div className="login shadow-md px-5 py-2">

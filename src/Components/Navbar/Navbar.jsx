@@ -34,7 +34,7 @@ const Navbar = () => {
             {user ? (
               <NavLink to="profile"><FaUser size={25} /></NavLink>
             ) : (
-              <NavLink to="login">Login</NavLink>
+              <NavLink to="login"><FaUser size={25} /></NavLink>
             )}
           </div>
         </li>

@@ -30,7 +30,7 @@ const Cart = () => {
           </div>
           <div className="amount flex text-black">
               <button className='py-1 bg-[#9fa59ffb] px-3 text-center cursor-pointer'>-</button>
-              <input type="text" value={2} className=' text-center text-black bg-[#c8d0c8fb] py-1 w-[50px] outline-none' placeholder='write something' />
+              <input type="text" value={2}  className=' text-center text-black bg-[#c8d0c8fb] py-1 w-[50px] outline-none' placeholder='write something' />
               <button className='py-1 cursor-pointer bg-[#9fa59ffb] px-3 text-center'>+</button>
           </div>
           </div>

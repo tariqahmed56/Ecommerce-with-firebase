@@ -2,6 +2,7 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerificati
 import { createContext, useContext, useState } from "react";
 import { auth, db } from "../config/firebaseconfig";
 import { addDoc, collection, doc, setDoc , getDoc } from "firebase/firestore";
+import Profile from "../Pages/Profile/Profile";
 
 export let AuthContext = createContext();
 export const AuthContextProvider = ({children}) =>{
@@ -16,7 +17,7 @@ export const AuthContextProvider = ({children}) =>{
               email,
               role:"user"
               });
-            await sendEmailVerification(auth.currentUser); 
+            // await sendEmailVerification(auth.currentUser); 
         } catch (error) {
             console.error(error)
             alert(error.message);
@@ -56,7 +57,6 @@ const changePassword = async (currentPassword, newPassword) => {
 
 
 const fetchUserById = async (documentId) => {
-    console.log(documentId)
   try {
     const docRef = doc(db, "users", documentId);
     const docSnap = await getDoc(docRef);
@@ -72,18 +72,9 @@ const fetchUserById = async (documentId) => {
   }
 };
 
-    //    const ObserveAuthState =  async() => {
-    //     onAuthStateChanged(auth,available=>{
-    //         if(available){                
-    //             setUser(available.uid);
-    //             console.log(available.uid)
-    //         }else{
-    //             setUser(null)
-    //         }
-    //     })
-    //    }
+ 
     return(
-        <AuthContext.Provider value={{loading,setLoading,user,setUser,CreateAccount,LoginUser,LogOut ,fetchUserById, changePassword}}>
+        <AuthContext.Provider value={{loading,setLoading,user,setUser,CreateAccount,LoginUser,LogOut ,fetchUserById, changePassword }}>
             {children}
         </AuthContext.Provider>
     )

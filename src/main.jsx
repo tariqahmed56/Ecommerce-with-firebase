@@ -70,6 +70,6 @@ import PrivateRoutes from './Components/Protection/PrivateRoutes.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-   <RouterProvider router={router}></RouterProvider>
+   <RouterProvider router={router}/>
   </StrictMode>
 )

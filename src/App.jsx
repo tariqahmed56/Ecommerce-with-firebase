@@ -7,29 +7,34 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from './config/firebaseconfig';
+import Navbar from './Components/Navbar/Navbar';
+import Footer from './Components/Navbar/Footer';
 function App() {
-const {ObserveAuthState , setUser , user,fetchUserById} = useAuth();
-let uid = "";
- useEffect(()=>{
-  onAuthStateChanged(auth,available=>{
-    if(available){           
-        uid=available.uid;
-    }else{
-        setUser(null)
+  const { setUser , user,fetchUserById , setProfile} = useAuth();
+  const [userId,setUserId]=useState(null)
+   useEffect(()=>{
+   const cleanUp =  onAuthStateChanged(auth,(isLoggedInUser)=>{
+      if(isLoggedInUser){           
+        // setUser(isLoggedInUser.uid);
+        fetchUserById(isLoggedInUser.uid)    
+      }else{
+          setUser(null)
+      }
+  
+  })
+  return ()=>cleanUp();
+   },[]);
+   useEffect(()=>{
+    if(user){
     }
-})
- },[]);
- useEffect(()=>{
-  if(user){
-    fetchUserById(user.uid) ;    
-  }
- },[user?.uid])
+   },[userId,user?.uid])
   return (
-    <div className='wrapper'>
+    <main className='wrapper'>
+      <Navbar/>
       <Outlet/>
       <ToastContainer/>
-
-    </div>
+      <Footer/>
+    </main>
   )
 }
 
