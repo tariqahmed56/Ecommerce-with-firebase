@@ -1,77 +1,66 @@
-import React, { useState, useEffect, useRef } from 'react';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Slider from '@mui/material/Slider';
 import { FaChevronDown } from 'react-icons/fa6';
-// styling of this component are inside index.css 
-const PriceRange = ({ min, max, step, gap, onChange }) => {
-  const [minValue, setMinValue] = useState(min);
-  const [maxValue, setMaxValue] = useState(max);
 
-  const minRef = useRef(null);
-  const maxRef = useRef(null);
-  const rangeRef = useRef(null);
+function valuetext(value) {
+  return `${value}°C`;
+}
 
-  useEffect(() => {
-    updateRangeWidth();
-  }, [minValue, maxValue]);
+const minDistance = 100;
 
-  const updateRangeWidth = () => {
-    if (minRef.current && maxRef.current && rangeRef.current) {
-      const minPercent = ((minValue - min) / (max - min)) * 100;
-      const maxPercent = ((maxValue - min) / (max - min)) * 100;
-      rangeRef.current.style.left = `${minPercent}%`;
-      rangeRef.current.style.width = `${maxPercent - minPercent}%`;
+export default function MinimumDistanceSlider() {
+  const [value2, setValue2] = React.useState([1, 10000]);
+  const [isExpanded, setIsExpanded] = React.useState(true);
+
+  const handleChange2 = (event, newValue, activeThumb) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (newValue[1] - newValue[0] < minDistance) {
+      if (activeThumb === 0) {
+        const clamped = Math.min(newValue[0], 100 - minDistance);
+        setValue2([clamped, clamped + minDistance]);
+      } else {
+        const clamped = Math.max(newValue[1], minDistance);
+        setValue2([clamped - minDistance, clamped]);
+      }
+    } else {
+      setValue2(newValue);
     }
   };
 
-  const handleMinChange = (e) => {
-    const value = Math.min(Number(e.target.value), maxValue - gap); 
-    setMinValue(value);
-    onChange({ min: value, max: maxValue });
+  const toggleExpansion = () => {
+    setIsExpanded((prev) => !prev);
   };
-
-  const handleMaxChange = (e) => {
-    const value = Math.max(Number(e.target.value), minValue + gap); 
-    setMaxValue(value);
-    onChange({ min: minValue, max: value });
-  };
-  const [priceDropdown,setpriceDropdown]=useState(false);
-  const handlepriceDropdown = () => setpriceDropdown(!priceDropdown);
 
   return (
-    <div className="py-2 mt-2 border-t-[2px] border-black">
-      <h2 className='font-semibold text-sm justify-between flex items-center py-2' onClick={handlepriceDropdown}> Price Range 
-         <span className={`text-xl transform ${priceDropdown ? 'rotate-180': 'rotate-0'} `}><FaChevronDown size={15}/></span></h2>
-  { priceDropdown && 
-    <div className="slider-container">
-      <input
-        type="range"
-        ref={minRef}
-        min={min}
-        max={max}
-        step={step}
-        value={minValue}
-        onChange={handleMinChange}
-        className="thumb thumb-left"
-      />
-      <input
-        type="range"
-        ref={maxRef}
-        min={min}
-        max={max}
-        step={step}
-        value={maxValue}
-        onChange={handleMaxChange}
-        className="thumb thumb-right"
-      />
-      <div className="slider">
-        <div className="slider-track"></div>
-        <div ref={rangeRef} className="slider-range"></div>
-        <div className="slider-left-value">{minValue}</div>
-        <div className="slider-right-value">{maxValue}</div>
+    <div className="w-full text-white box-border py-2 border-t border-gray-800 mt-1">
+      <div 
+        className="flex items-center justify-between cursor-pointer text-black font-semibold text-sm mb-2 w-full hover:text-gray-500"
+        onClick={toggleExpansion}
+      >
+        <span>Price Range</span>
+        <span className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+          <FaChevronDown size={15} />
+        </span>
       </div>
-    </div>
-    }
+
+      {isExpanded && (
+        <Box sx={{ width: '100%' }}>
+          <Slider
+            getAriaLabel={() => 'Minimum distance shift'}
+            value={value2}
+            onChange={handleChange2}
+            valueLabelDisplay="auto"
+            getAriaValueText={valuetext}
+            min={0}
+            max={1000}
+            disableSwap
+          />
+        </Box>
+      )}
     </div>
   );
-};
-
-export default PriceRange;
+}

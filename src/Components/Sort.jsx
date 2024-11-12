@@ -2,7 +2,7 @@ import React from 'react'
 
 const Sort = () => {
   return (
-    <select className='bg-gray-300 px-3 py-3 outline-none border cursor-pointer'>
+    <select className='bg-[#19243e] text-white rounded-sm px-4 py-3 outline-none border cursor-pointer'>
     <option value="Price Low to High"  className='cursor-pointer uppercase'>
         SORT BY
       </option>

@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import AdminNav from '../../Components/AdminNav'
 import { Outlet } from 'react-router-dom'
 const AdminLayout = () => {
+  const [isSidebarExpanded,setSidebarExpanded] = useState(false);
+  const handleClick = () =>{
+    setSidebarExpanded(false);
+  }
   return (
     <div className='min-h-[100dvh] text-black flex relative'>
-     <AdminNav/>
-     <div className="bg-[#0F172A] w-full">
-      <Outlet/>
+     <AdminNav isSidebarExpanded={isSidebarExpanded} setSidebarExpanded={setSidebarExpanded}/>
+     <div className="bg-[#0F172A] w-full" onClick={handleClick}>
+      <Outlet />
      </div>
     </div>
   )

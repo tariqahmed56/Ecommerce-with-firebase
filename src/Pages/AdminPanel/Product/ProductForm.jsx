@@ -11,6 +11,7 @@ import {
 import { ToastContainer, toast } from "react-toastify";
 
 const ProductForm = ({ action, data }) => {
+
   const [uploading, setUploading] = useState(false);
   const [PreviewImages, setPreviewImages] = useState(null);
   const [Files, setFiles] = useState(null);
@@ -27,38 +28,47 @@ const ProductForm = ({ action, data }) => {
   });
   useEffect(() => {
     if (!data?.variants) {
-        const initialVariants = productData.sizes.map((size) => ({
-          size,
-          color: productData.color,
-          stock: "0",
-          price: productData.price,
-        }));
-        setProductData((prev) => ({ ...prev, variants: initialVariants }));
-      }
-  }, [productData.sizes,productData.color]);
-  let Categories = ["A", "b", "c", "e"];
-  const Gender = ["Male", "Female", "Neuter"];
+      const initialVariants = productData.sizes.map((size) => ({
+        size,
+        color: productData.color,
+        stock: "0",
+        price: productData.price,
+      }));
+      setProductData((prev) => ({ ...prev, variants: initialVariants }));
+    }
+  }, [productData.sizes, productData.color]);
+  let Categories = ["tshrit", "Hoodie", "kurta", "e"];
+  let Brands = ["Mendeez","Zeroyya","Zara","Adidas","Nike","H&M"];
+  const Gender = ["Select", "Male", "Female", "Neuter"];
+
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    setFiles(files);
-    const imagePreviews = files.map((file) => {
-      return URL.createObjectURL(file);
-    });
-    setPreviewImages(imagePreviews);
+    // Only when Action is Add
+    if(action === "add")
+    {
+      const files = Array.from(e.target.files);
+      console.log(files)
+      setFiles(files);
+      const imagePreviews = files.map((file) => {
+        return URL.createObjectURL(file);
+      });
+      setPreviewImages(imagePreviews);
+    }else{
+      // If Action is Edit
+      ErrorMessage("You Can't update Images")
+    }
   };
+  
   const handleChange = (event) => {
     const { type, name, value } = event.target;
-  
+
     if (name.startsWith("variant-")) {
-    //    example value of name : varaint-S-price or varaint-S-price
-        const [_, size, field] = name.split("-");
-        
+      //    example value of name : varaint-S-price or varaint-XL-price
+      const [_, size, field] = name.split("-");
+
       setProductData((prev) => {
         const numberValue = parseInt(value);
         const updatedVariants = prev.variants.map((variant) =>
-          variant.size === size 
-            ? { ...variant, [field]: numberValue , } 
-            : variant
+          variant.size === size ? { ...variant, [field]: numberValue } : variant
         );
         return { ...prev, variants: updatedVariants };
       });
@@ -69,7 +79,7 @@ const ProductForm = ({ action, data }) => {
       }));
     }
   };
-  
+
   const successMessage = () => {
     toast.success("Product Successfully Added", {
       position: "top-right",
@@ -81,6 +91,7 @@ const ProductForm = ({ action, data }) => {
       progress: undefined,
     });
   };
+
   const ErrorMessage = (message) => {
     toast.error(message, {
       position: "top-right",
@@ -92,31 +103,42 @@ const ProductForm = ({ action, data }) => {
       progress: undefined,
     });
   };
-    
+
   const AddFormData = async (e) => {
     e.preventDefault();
     setUploading(true);
-  
+    //  if action is Add
+    if(action==="add")
+    {
+      await writeProduct();
+    } 
+    else 
+    {
+      // action === "update"
+      UpdateProductData()
+    }
+    
+  };
+
+  const writeProduct = async () => {
     try {
       const docRef = doc(collection(db, "products"));
       const productId = docRef.id;
-  
       const imageUrls = await uploadProductImages(Files, productId);
       if (imageUrls.length === 0) {
         ErrorMessage("Failed to upload images. Try again.");
         setUploading(false);
         return;
       }
-  
+
       const finalProductData = {
         ...productData,
         id: productId,
-        imageUrls,  
+        imageUrls,
       };
-  
+
       await setDoc(docRef, finalProductData);
 
-  
       successMessage();
     } catch (error) {
       ErrorMessage("Something went wrong");
@@ -124,39 +146,43 @@ const ProductForm = ({ action, data }) => {
     } finally {
       setUploading(false);
     }
-  };
-  
-  
+  }
+
+  const UpdateData = async() =>{
+    alert("Updated");
+  }
+
+  // Run This Function  Only , when the action is Add (action = Add)
   async function uploadProductImages(files, Id) {
     if (!files || files.length === 0) {
       ErrorMessage("Please select images for the product.");
       return [];
     }
-  
+
     const uploadPromises = files.map(async (file) => {
       const name = Date.now() + file.name;
       const storageRef = ref(storage, `products/${Id}/${name}`);
       await uploadBytes(storageRef, file);
-      return getDownloadURL(storageRef);  
+      return getDownloadURL(storageRef);
     });
-  
+
     try {
-      const imageUrls = await Promise.all(uploadPromises); 
-    //   console.log( imageUrls);
+      const imageUrls = await Promise.all(uploadPromises);
+      //   console.log( imageUrls);
       return imageUrls;
     } catch (error) {
       ErrorMessage("Error uploading images");
       console.error(error);
-      return []; 
+      return [];
     }
   }
-  
+
   return (
-    <div className="w-full px-2 py-4 flex justify-start items-center relative">
+    <div className="w-full px-2 py-4 flex justify-start items-center relative z-10">
       {uploading && (
         <div className="absolute inset-0 h-full w-full flex flex-col gap-7 justify-center items-center bg-[#23212198]">
-            <span class="loader"></span>
-            <h1 className="text-yellow-600">Uploading...</h1>
+          <span className="loader"></span>
+          <h1 className="text-yellow-600">Uploading...</h1>
         </div>
       )}
       <form
@@ -186,7 +212,8 @@ const ProductForm = ({ action, data }) => {
                 Category: <sup>*</sup>
               </span>
               <select
-                name="brand"
+              id="category"
+                name="category"
                 value={productData.brand}
                 onChange={(e) => handleChange(e)}
                 className="bg-transparent cursor-pointer outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
@@ -203,15 +230,15 @@ const ProductForm = ({ action, data }) => {
                 Brand: <sup>*</sup>
               </span>
               <select
-                name="category"
-                value={productData.category}
+                name="brand"
+                value={productData.brand}
                 onChange={(e) => handleChange(e)}
                 autoComplete="off"
                 className="bg-transparent cursor-pointer outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
               >
-                {Categories.map((cat) => (
-                  <option value={cat} className="bg-gray-700">
-                    {cat}
+                {Brands.map((brand) => (
+                  <option value={brand} className="bg-gray-700" key={brand}>
+                    {brand}
                   </option>
                 ))}
               </select>
@@ -284,14 +311,13 @@ const ProductForm = ({ action, data }) => {
             <textarea
               name="description"
               value={productData.description}
-               rows={4}
-               cols={40}
+              rows={4}
+              cols={40}
               onChange={(e) => handleChange(e)}
               autoComplete="off"
               className="bg-transparent outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
             />
           </div>
-        
         </div>
         <div className="form-part-2 sm:w-full md:w-[300px] flex flex-col justify-center items-center py-4 gap-2 bg-[#1E293B] rounded-md border border-gray-500">
           <label
@@ -334,53 +360,58 @@ const ProductForm = ({ action, data }) => {
               ))}
             </div>
           )}
-         
-        
         </div>
-        {
-            productData.color.length > 3 &&
-        <div className="form-part-3 basis-[100%]  md:basis-[600px]  bg-[#1E293B] flex justify-center py-1 gap-3">   
+        {productData.color.length > 3 && (
+          <div className="form-part-3 basis-[100%]  md:basis-[600px]  bg-[#1E293B] flex justify-center py-1 gap-3">
             <div className="variants ">
-            <h3 className="text-center font-semibold mt-2">Product Variants</h3>
-            {productData.variants.map((item, idx) => (
-              <div className="variant" key={idx}>
-                <h3 className="text-white">Stock and Price of {item.size} size</h3>
-                <div className="fields-container flex gap-4">
-                  <div className=" text-sm text-[#ccc8c8] flex flex-col gap-1 ">
-                    <span>Price: <sup>*</sup></span>
-                    <input
-                      type="number"
-                      name={`variant-${item.size}-price`}  
-                      value={item.price}
-                      onChange={(e)=>handleChange(e)}
-                      autoComplete="off"
-                      className="bg-transparent outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
-                    />
-                  </div>
-                  <div className=" text-sm text-[#ccc8c8] flex flex-col gap-1 ">
-                    <span>Stock: <sup>*</sup></span>
-                    <input
-                      type="number"
-                      name={`variant-${item.size}-stock`}  
-                      value={item.stock}
-                      onChange={(e)=>handleChange(e)}
-                      autoComplete="off"
-                      className="bg-transparent outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
-                    />
+              <h3 className="text-center font-semibold mt-2">
+                Product Variants
+              </h3>
+              {productData.variants.map((item, idx) => (
+                <div className="variant" key={idx}>
+                  <h3 className="text-white">
+                    Stock and Price of {item.size} size
+                  </h3>
+                  <div className="fields-container flex gap-4">
+                    <div className=" text-sm text-[#ccc8c8] flex flex-col gap-1 ">
+                      <span>
+                        Price: <sup>*</sup>
+                      </span>
+                      <input
+                        type="number"
+                        name={`variant-${item.size}-price`}
+                        value={item.price}
+                        onChange={(e) => handleChange(e)}
+                        autoComplete="off"
+                        className="bg-transparent outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
+                      />
+                    </div>
+                    <div className=" text-sm text-[#ccc8c8] flex flex-col gap-1 ">
+                      <span>
+                        Stock: <sup>*</sup>
+                      </span>
+                      <input
+                        type="number"
+                        name={`variant-${item.size}-stock`}
+                        value={item.stock}
+                        onChange={(e) => handleChange(e)}
+                        autoComplete="off"
+                        className="bg-transparent outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
               <button
-            type="submit"
-            className="text-white mt-2 mx-auto px-3 py-1 w-[80%] rounded-md bg-[#dcd752] disabled:bg-[#d1cd4fcb] disabled:cursor-not-allowed"
-            disabled={uploading}
-          >
-          Upload
-          </button>
+                type="submit"
+                className="text-white mt-2 mx-auto px-3 py-1 w-[80%] rounded-md bg-[#dcd752] disabled:bg-[#d1cd4fcb] disabled:cursor-not-allowed"
+                disabled={uploading}
+              >
+                Upload
+              </button>
+            </div>
           </div>
-        </div>
-}
+        )}
       </form>
     </div>
   );

@@ -58,7 +58,7 @@ const Home = () => {
     <Hero/>
      <div className="Categories relative flex flex-col md:flex-row justify-center">    
       {categories.map((cat)=>(
-        <Link to={cat.path} className='md:basis-1/3 basis-[100%] '>
+        <Link to={cat.path} className='md:basis-1/3 basis-[100%] ' key={cat}>
         <div className="h-[200px] md:h-[400px] bg-cover bg-top relative" style={{backgroundImage:`url(${cat.img})`}} key={cat.id}> 
         <p className='absolute top-9 left-5 decoration-white p-2 font-bold text-lg tracking-widest cursor-pointer'>0{cat.id}</p>
         <p className="text text-[2.5rem] absolute bottom-3 font-bold left-0 px-5 leading-[45px] flex md:flex-col gap-4 flex-wrap">

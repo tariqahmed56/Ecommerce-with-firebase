@@ -4,7 +4,7 @@ import App from './App.jsx'
 import React from 'react'
 import './index.css'
 import Women from './Pages/Women/Women.jsx'
-import Men from './Pages/Men/Men.jsx'
+import Men, { loader } from './Pages/Men/Men.jsx'
 import {
   createBrowserRouter ,
    createRoutesFromElements,
@@ -40,7 +40,7 @@ import PrivateRoutes from './Components/Protection/PrivateRoutes.jsx'
     <Route path='/' element={<MainLayout/>}>  
     <Route index element={<Home/>}/> 
     <Route path='store' element={<Allproducts/>}/>
-    <Route path='men-fashion' element={<Men/>}/> 
+    <Route path='men-fashion' loader={loader} element={<Men/>}/> 
     <Route path='women-fashion' element={<Women/>}/> 
     <Route path='single' element={<SingleProduct/>} />
     <Route path='Login' element={<Login/>}/> 

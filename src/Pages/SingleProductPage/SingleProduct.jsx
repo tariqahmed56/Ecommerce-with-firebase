@@ -13,12 +13,12 @@ const SingleProduct = () => {
     setSelectedSize(size);
   }
   return (
-    <div className="min-h-[100dvh] text-black px-2 md:mx-auto md:w-[100vw] py-3 mx-2 md:flex justify-center items-start gap-10">
+    <div className="min-h-[100dvh] text-black px-2 md:mx-auto md:w-[100vw] py-3 md:flex justify-center items-start gap-10">
       <div className="product-images flex-col md:flex-row flex gap-2 justify-start items-center">
         <img
           src={p1}
           alt="Product img"
-          className="md:w-[100%] w-full  h-[70vh] object-contain shadow-md py-2"
+          className="md:w-[450px] w-full  h-[70vh] object-contain shadow-md py-2"
         />
         <div className="images flex flex-row flex-wrap gap-2 md:flex-col md:w-[200px]">
           <img

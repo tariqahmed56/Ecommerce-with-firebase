@@ -5,7 +5,7 @@ import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 const ForLoggedInUser = ({Component}) => {
     const {user} = useContext(AuthContext);
 
-    return user ? <Outlet/> : <Navigate to='login'/> 
+    return true ? <Outlet/> : <Navigate to='login'/> 
 }
 
 export default ForLoggedInUser

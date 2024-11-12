@@ -1,57 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaTachometerAlt, FaUsers, FaShoppingCart, FaPlus, FaMinus, FaThList, FaFolderOpen } from 'react-icons/fa';
+import { FaHome, FaUsers, FaPlus, FaMinus, FaBoxOpen } from 'react-icons/fa';
+import { BiPackage } from 'react-icons/bi';
+import { MdFolderSpecial } from 'react-icons/md';
 import logo from '../assets/logo.jpeg';
 
-const AdminNav = () => {
-  const [isCategoriesOpen, setCategoriesOpen] = useState(false);
-  const [isProductsOpen, setProductsOpen] = useState(false);
+const AdminSidebar = ({ isSidebarExpanded, setSidebarExpanded }) => {
+  const [isCategoryMenuOpen, setCategoryMenuOpen] = useState(false);
+  const [isProductMenuOpen, setProductMenuOpen] = useState(false);
 
-  const toggleCategories = () => setCategoriesOpen(!isCategoriesOpen);
-  const toggleProducts = () => setProductsOpen(!isProductsOpen);
+  const toggleCategoryMenu = () => setCategoryMenuOpen(!isCategoryMenuOpen);
+  const toggleProductMenu = () => setProductMenuOpen(!isProductMenuOpen);
+  
+  const handleSidebarExpand = () => {
+    setSidebarExpanded(true);
+  };
+
+  useEffect(() => {
+    if (!isSidebarExpanded) {
+      setCategoryMenuOpen(false);
+      setProductMenuOpen(false);
+    }
+  }, [isSidebarExpanded]);
 
   return (
-    <div className="Admin-Sidebar basis-[250px]  bg-[#1E293B] px-4 py-2 flex flex-col items-center">
-      <img src={logo} alt="logo" className="mb-1 h-12 w-auto object-contain" />
+    <div onClick={handleSidebarExpand} className={`admin-sidebar z-20 w-[50px] lg:w-[250px] bg-[#1E293B] px-4 py-2 flex flex-col items-center ${isSidebarExpanded ? "absolute md:relative w-auto md:w-[250px] h-screen shadow-md" : ""}`}>
+      <img src={logo} alt="logo" className="mb-1 h-12 w-auto object-contain hidden lg:block" />
 
-      <nav className="w-full flex flex-col gap-3">
+      <nav className="w-full flex flex-col gap-6">
         <Link to="." className="text-white text-base flex items-center gap-2 hover:text-gray-300">
-          <FaTachometerAlt /> Dashboard
+          <FaHome size={30}/> <span className={`${isSidebarExpanded ? "block" : "hidden"} lg:block`}>Dashboard</span>
         </Link>
         <Link to="orders" className="text-white text-base flex items-center gap-2 hover:text-gray-300">
-          <FaShoppingCart /> Orders
+          <FaBoxOpen size={30}/> <span className={`${isSidebarExpanded ? "block" : "hidden"} lg:block`}>Orders</span>
         </Link>
         <Link to="users" className="text-white text-base flex items-center gap-2 hover:text-gray-300">
-          <FaUsers /> Users
+          <FaUsers size={30}/> <span className={`${isSidebarExpanded ? "block" : "hidden"} lg:block`}>Users</span>
         </Link>
 
-        {/*Dropdown for Products*/}
         <div>
-          <button onClick={toggleProducts} className="text-white text-base flex items-center gap-2 hover:text-gray-300 w-full">
-            <FaThList /> Products {isProductsOpen ? <FaMinus /> : <FaPlus />}
+          <button onClick={toggleProductMenu} className="text-white text-base flex items-center gap-2 justify-between md:justify-start hover:text-gray-300 w-full">
+            <BiPackage size={30}/> <span className={`${isSidebarExpanded ? "block" : "hidden"} lg:block`}>Products</span> 
+            {isProductMenuOpen ? <FaMinus size={10} className={`${isSidebarExpanded ? "" : "hidden lg:block"}`} /> : <FaPlus size={10} className={`${isSidebarExpanded ? "" : "hidden lg:block"}`} />}
           </button>
-          <div className={`ml-6 flex flex-col gap-2 transition-all duration-300 ${isProductsOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-            <Link to="add-product" className="text-white text-sm hover:text-gray-300">
-              Add Product
-            </Link>
-            <Link to="product-list" className="text-white text-sm hover:text-gray-300">
-              Product List
-            </Link>
+          <div className={`ml-6 flex flex-col gap-2 transition-all duration-300 ${isProductMenuOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+            <Link to="add-product" className="text-white text-sm hover:text-gray-300">Add Product</Link>
+            <Link to="product-list" className="text-white text-sm hover:text-gray-300">Product List</Link>
           </div>
         </div>
 
-        {/*  Dropdown  for Categories*/}
         <div>
-          <button onClick={toggleCategories} className="text-white text-base flex items-center gap-2 hover:text-gray-300 w-full">
-            <FaFolderOpen /> Categories {isCategoriesOpen ? <FaMinus /> : <FaPlus />}
+          <button onClick={toggleCategoryMenu} className="text-white text-base flex justify-between md:justify-start items-center gap-2 hover:text-gray-300 w-full">
+            <MdFolderSpecial size={30}/> <span className={`${isSidebarExpanded ? "block" : "hidden"} lg:block`}>Categories</span> 
+            {isCategoryMenuOpen ? <FaMinus size={10} className={`${isSidebarExpanded ? "" : "hidden lg:block"}`} /> : <FaPlus size={10} className={`${isSidebarExpanded ? "" : "hidden lg:block"}`} />}
           </button>
-          <div className={`ml-6 flex flex-col gap-2 transition-all duration-300 ${isCategoriesOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
-            <Link to="add-category" className="text-white text-sm hover:text-gray-300">
-              Add Category
-            </Link>
-            <Link to="category-list" className="text-white text-sm hover:text-gray-300">
-              Categories List
-            </Link>
+          <div className={`ml-6 flex flex-col gap-2 transition-all duration-300 ${isCategoryMenuOpen ? 'max-h-40 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+            <Link to="add-category" className="text-white text-sm hover:text-gray-300">Add Category</Link>
+            <Link to="category-list" className="text-white text-sm hover:text-gray-300">Categories List</Link>
           </div>
         </div>
       </nav>
@@ -59,4 +64,4 @@ const AdminNav = () => {
   );
 };
 
-export default AdminNav;
+export default AdminSidebar;

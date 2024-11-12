@@ -47,7 +47,7 @@ const Navbar = () => {
 
       {/* Desktop Navigation */}
       <ul className="sm:flex hidden gap-3 text-sm font-light">
-        <li><NavLink to="/">Home</NavLink></li>
+        <li><NavLink to="store">store</NavLink></li>
         <li><NavLink to="men-fashion">Men's Fashion</NavLink></li>
         <li><NavLink to="women-fashion">Women's Fashion</NavLink></li>
       {user?.role === 'admin' && <li><NavLink to="admin-panel">Dashboard</NavLink></li>}

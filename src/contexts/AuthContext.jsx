@@ -17,7 +17,7 @@ export const AuthContextProvider = ({children}) =>{
               email,
               role:"user"
               });
-            // await sendEmailVerification(auth.currentUser); 
+            await sendEmailVerification(auth.currentUser); 
         } catch (error) {
             console.error(error)
             alert(error.message);

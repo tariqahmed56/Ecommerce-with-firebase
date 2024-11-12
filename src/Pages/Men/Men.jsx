@@ -1,24 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, Suspense } from "react";
+import { useLoaderData, Await, defer } from "react-router-dom";
 import menStyle from "../../assets/menswiper/men-style.webp";
-import frag from "../../assets/menswiper/frag.webp";
 import trousers from "../../assets/menswiper/men-trousers.webp";
-import shoes from "../../assets/menswiper/shoes.avif";
-import nike from "../../assets/menswiper/nike-shoes.jpg";
-import jacket from "../../assets/menswiper/jacket.jpg";
+import banner3 from '../../assets/menswiper/Men-Suits.webp';
+import banner1 from "../../assets/menswiper/banner.webp";
+import banner2 from "../../assets/menswiper/slider-img.webp";
 import ProductCard from "../../Components/ProductCard";
 import Sidebar from "../../Components/Sidebar";
 import Carousel from "../../Components/Carousel";
 import Sort from "../../Components/Sort";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../config/firebaseconfig";
+import SidebarLoader from "../../Components/PlaceHolderLoaders/SideBarLoader";
+import ProductsLoader from "../../Components/PlaceHolderLoaders/ProductsLoader";
+export function loader() {
+  const productCollectionRef = collection(db, "products");
+  const categoriesCollectionRef = collection(db, "categories");
+
+  return defer({
+    products: getDocs(productCollectionRef).then((snapshot) => snapshot.docs.map((doc) => doc.data())),
+    categories: getDocs(categoriesCollectionRef).then((snapshot) => snapshot.docs.map((doc) => doc.data())),
+  });
+}
+
+
 const Men = () => {
+  const { products, categories } = useLoaderData();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-  const location = useLocation();
+
   return (
     <div className="w-full text-black">
-      <Carousel images={[menStyle, nike, trousers, shoes, jacket, frag]} />
+      <Carousel images={[menStyle, banner3, banner1, banner2, trousers]} />
       <div className="flex justify-start w-[75%] mx-auto">
         <button
           style={{ fontFamily: "Playfair Display" }}
@@ -36,25 +52,40 @@ const Men = () => {
             ${isSidebarOpen ? "left-0" : "-left-full"} 
             absolute top-0 h-full md:w-auto w-3/4 bg-white z-50 md:z-auto`}
         >
-          <Sidebar genre={"Men's Fashion"} />
+          <Suspense fallback={<SidebarLoader />}>
+            <Await resolve={categories}>
+              {(loadedCategories) => (
+                <Sidebar genre={"Men's Fashion"} gender={"Male"} data={loadedCategories} />
+              )}
+            </Await>
+          </Suspense>
         </div>
-        <div className="flex flex-col items-center gap-2 relative">
+
+        <div className="flex flex-col items-center gap-2 relative w-full">
           <div className="Sortwraper self-end">
-            <Sort/>
+            <Sort />
           </div>
-        <div className="flex flex-wrap justify-center items-center gap-4 w-full">
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-          <ProductCard />
-        </div>
+
+          <Suspense fallback={<ProductsLoader />}>
+            <Await resolve={products}>
+              {(loadedProducts) => (
+                <div className="flex flex-wrap justify-center items-center gap-4 w-full">
+                  {loadedProducts.length !== 0 ? (
+                    loadedProducts.map((item, index) => (
+                      <ProductCard
+                        key={index}
+                        imgUrl={item.imageUrls[0]}
+                        title={item.title}
+                        brand={item.brand}
+                        actualPrice={item.price}
+                        originalPrice={Number(item.price) + 500}
+                      />
+                    ))
+                  ) : null}
+                </div>
+              )}
+            </Await>
+          </Suspense>
         </div>
       </div>
     </div>
