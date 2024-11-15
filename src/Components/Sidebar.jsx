@@ -4,15 +4,19 @@ import PriceRange from './PriceRange';
 import { FaChevronDown } from 'react-icons/fa6';
 import { useLocation } from 'react-router-dom';
 
-const Sidebar = ({ genre , data , gender }) => {
+const Sidebar = ({ genre , allCategories , gender }) => {
   const [checked, setChecked] = useState(false);
   const [categories,setCategories] = useState([]);
   useEffect(()=>{
-    let cats= data.filter(cat=>(cat.gender).toLowerCase() === gender.toLowerCase())
-    setCategories(cats)
-  },[])
+    if(gender === "Neuter"){
+      console.log(gender)
+      setCategories(allCategories);
+    }else{
+      setCategories(()=>allCategories.filter(cats=>cats.gender === gender));
+    }
+  },[allCategories,gender])
   const brands = [
-    { brand: "Mendeez" },
+    { brand: "Mendeez" }, 
     { brand: "Zeroyya" },
     { brand: "Zara" },
     { brand: "Adidas" },
@@ -38,7 +42,7 @@ const Sidebar = ({ genre , data , gender }) => {
       </h1>
       {categoryDropdown && (
         <div className="flex flex-col py-2">
-          {categories.map((cat) => (
+          {categories?.map((cat) => (
             <Input type="checkbox" value={cat.category} label={cat.category} key={cat.category} />
           ))}
         </div>

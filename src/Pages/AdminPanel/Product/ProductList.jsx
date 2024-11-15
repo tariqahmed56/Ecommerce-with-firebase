@@ -31,6 +31,8 @@ const ProductList = () => {
     <th className='py-2 border border-gray-600 text-center'>Name</th>
     <th className='py-2 border border-gray-600 text-center'>Price</th>
     <th className='py-2 border border-gray-600 text-center'>Stock</th>
+    <th className='py-2 border border-gray-600 text-center'>Gender</th>
+    <th className='py-2 border border-gray-600 text-center'>Brand</th>
     <th className='py-2 border border-gray-600 text-center'>Edit</th>
     <th className='py-2 border border-gray-600 text-center'>Delete</th>
   </tr>
@@ -41,6 +43,8 @@ const ProductList = () => {
         <TableRow  value={item.title} maxWidth={"150px"} />
         <TableRow value={item.price} maxWidth={"70px"} />
         <TableRow value={item.variants.reduce((acc,curr)=>acc+ Number(curr.stock),0)} maxWidth={"70px"}/>
+        <TableRow value={item.gender} maxWidth={"70px"} />
+        <TableRow value={item.brand} maxWidth={"70px"} />
         <TableRow value={"Edit"} maxWidth={"70px"} id={item.id}/>
         <TableRow value={"Delete"} maxWidth={"70px"} id={item.id}/>
     </tr>

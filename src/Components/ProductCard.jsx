@@ -4,7 +4,7 @@ import { AiOutlineHeart } from 'react-icons/ai';
 import { FaCartArrowDown, FaCartPlus } from 'react-icons/fa6';
 import { Link, redirect, useNavigate } from 'react-router-dom';
 
-const ProductCard = ({ imgUrl, discount, brand, title, isShippingFree, originalPrice, actualPrice , id }) => {
+const ProductCard = ({ imgUrl, discount, brand, title, isShippingFree, originalPrice, actualPrice , id , stock }) => {
   const navigate = useNavigate();
 
   function handleIconClick(event) {
@@ -19,11 +19,12 @@ const ProductCard = ({ imgUrl, discount, brand, title, isShippingFree, originalP
   }
 
   function handleCardClick() {
-    navigate('/single') 
+    // navigate('/single', {state:{id}}) 
   }
 
   return (
     <div onClick={handleCardClick} className="flex flex-col w-[200px] relative h-[340px] cursor-pointer text-black border border-gray-200 rounded-md">
+{  stock === 0 && <div className="sold-out-tag absolute z-10 px-2  w-[100px] py-3 -translate-x-2 translate-y-[10px] rotate-[30deg] rounded-md text-white font-semibold bg-red-500 top-1 left-2">sold Out</div>}
       <AiOutlineHeart
         className="absolute icon-heart top-1 right-1 z-50 text-white cursor-pointer"
         size={25}

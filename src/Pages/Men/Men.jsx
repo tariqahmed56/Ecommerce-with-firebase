@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState, Suspense, useEffect, useContext } from "react";
 import { useLoaderData, Await, defer } from "react-router-dom";
 import menStyle from "../../assets/menswiper/men-style.webp";
 import trousers from "../../assets/menswiper/men-trousers.webp";
@@ -13,6 +13,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../config/firebaseconfig";
 import SidebarLoader from "../../Components/PlaceHolderLoaders/SideBarLoader";
 import ProductsLoader from "../../Components/PlaceHolderLoaders/ProductsLoader";
+import { productDataContext } from "../../contexts/ProductDataContext";
 export function loader() {
   const productCollectionRef = collection(db, "products");
   const categoriesCollectionRef = collection(db, "categories");
@@ -25,13 +26,33 @@ export function loader() {
 
 
 const Men = () => {
-  const { products, categories } = useLoaderData();
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const {productData,contextCategories , setContextCategories , setProductData} = useContext(productDataContext);
 
+  const { products, categories } = useLoaderData();
+  // const [productData,setProductData] = useState([]);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  
+  useEffect(()=>{
+    setProductData(async ()=>{
+       let dt = await products; 
+       console.log(dt)
+       return dt;
+    });
+    console.log(productData)
+   setContextCategories(async ()=>{
+   let ct = await categories ;
+  console.log(ct)
+  return ct;
+  })
 
+  console.log(contextCategories)
+  // let [dt , ct] = Promise.all([products,categories]);
+  // console.log(dt,ct)
+  },[])
   return (
     <div className="w-full text-black">
       <Carousel images={[menStyle, banner3, banner1, banner2, trousers]} />
@@ -68,8 +89,9 @@ const Men = () => {
 
           <Suspense fallback={<ProductsLoader />}>
             <Await resolve={products}>
-              {(loadedProducts) => (
-                <div className="flex flex-wrap justify-center items-center gap-4 w-full">
+              {(loadedProducts) => {
+                
+              return  <div className="flex flex-wrap justify-center items-center gap-4 w-full">
                   {loadedProducts.length !== 0 ? (
                     loadedProducts.map((item, index) => (
                       <ProductCard
@@ -79,11 +101,12 @@ const Men = () => {
                         brand={item.brand}
                         actualPrice={item.price}
                         originalPrice={Number(item.price) + 500}
+                        stock={item.variants.reduce((acc,curr)=>acc+Number(curr.stock),0)}
                       />
                     ))
                   ) : null}
                 </div>
-              )}
+              }}
             </Await>
           </Suspense>
         </div>

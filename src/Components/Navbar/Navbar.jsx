@@ -24,9 +24,9 @@ const Navbar = () => {
 
       {/* Mobile & Tablet Navigation */}
       <ul className={`flex gap-3 sm:hidden ${isOpen ? 'flex opacity-100 h-[150px] pointer-events-auto' : " h-0 pointer-events-none opacity-0"} z-50 absolute flex-col bg-black w-full left-0 top-[100%] p-3`}>
-        <li><NavLink to="/">Home</NavLink></li>
-        <li><NavLink to="men-fashion">Men's Fashion</NavLink></li>
-        <li><NavLink to="women-fashion">Women's Fashion</NavLink></li>
+        <li><NavLink to={`store/all-product`}>Home</NavLink></li>
+        <li><NavLink to="store/men-fashion">Men's Fashion</NavLink></li>
+        <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
         <li>
           <div className="actions flex gap-4">
             <AiOutlineSearch size={25} />
@@ -47,9 +47,9 @@ const Navbar = () => {
 
       {/* Desktop Navigation */}
       <ul className="sm:flex hidden gap-3 text-sm font-light">
-        <li><NavLink to="store">store</NavLink></li>
-        <li><NavLink to="men-fashion">Men's Fashion</NavLink></li>
-        <li><NavLink to="women-fashion">Women's Fashion</NavLink></li>
+      <li><NavLink to={`store/all-product`}>Home</NavLink></li>
+        <li><NavLink to="store/men-fashion">Men's Fashion</NavLink></li>
+        <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
       {user?.role === 'admin' && <li><NavLink to="admin-panel">Dashboard</NavLink></li>}
       </ul>
 

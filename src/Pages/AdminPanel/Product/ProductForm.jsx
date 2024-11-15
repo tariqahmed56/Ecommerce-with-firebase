@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FiUploadCloud } from "react-icons/fi";
 import { collection, addDoc, doc, setDoc } from "firebase/firestore";
 import { db, storage } from "../../../config/firebaseconfig";
@@ -9,8 +9,10 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import { ToastContainer, toast } from "react-toastify";
+import { productDataContext } from "../../../contexts/ProductDataContext";
 
 const ProductForm = ({ action, data }) => {
+  const {contextCategories} = useContext(productDataContext)
 
   const [uploading, setUploading] = useState(false);
   const [PreviewImages, setPreviewImages] = useState(null);
@@ -22,6 +24,7 @@ const ProductForm = ({ action, data }) => {
     color: data?.color ? data.color : "",
     price: data?.price ? data.price : "",
     deliveryCharges: data?.deliveryCharges || "",
+    gender : data?.gender || "",
     sizes: ["XS", "S", "M", "L", "XL"],
     imageUrls: data?.imageUrls ? data?.imageUrls : [],
     description: data?.description || "",
@@ -37,9 +40,16 @@ const ProductForm = ({ action, data }) => {
       setProductData((prev) => ({ ...prev, variants: initialVariants }));
     }
   }, [productData.sizes, productData.color]);
-  let Categories = ["tshrit", "Hoodie", "kurta", "e"];
+  let [Categories,setCategories] = useState([]);
   let Brands = ["Mendeez","Zeroyya","Zara","Adidas","Nike","H&M"];
   const Gender = ["Select", "Male", "Female", "Neuter"];
+  useEffect(()=>{
+    setCategories(()=>{
+    let dt = contextCategories?.filter((cat)=>cat.gender === "Female");
+      let final = ["Select",...dt];
+      return final
+    })
+  },[contextCategories])
 
   const handleFileChange = (e) => {
     // Only when Action is Add
@@ -214,13 +224,14 @@ const ProductForm = ({ action, data }) => {
               <select
               id="category"
                 name="category"
-                value={productData.brand}
+                disabled={productData.gender === ""}
+                value={productData.category}
                 onChange={(e) => handleChange(e)}
                 className="bg-transparent cursor-pointer outline-none border rounded-lg border-gray-700 text-white px-1 py-1"
               >
                 {Categories.map((cat) => (
-                  <option value={cat} className="bg-gray-700" key={cat}>
-                    {cat}
+                  <option value={cat.category} className="bg-gray-700" key={cat.category}>
+                    {cat.category}
                   </option>
                 ))}
               </select>

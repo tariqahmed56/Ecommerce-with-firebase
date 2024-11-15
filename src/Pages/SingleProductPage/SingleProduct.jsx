@@ -1,7 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import p1 from "../../assets/p1.webp";
 import { CiHeart } from "react-icons/ci";
+import { useLocation, useParams } from "react-router-dom";
+import productDataProvider, { productDataContext } from "../../contexts/ProductDataContext";
 const SingleProduct = () => {
+  const params = useParams();
+  const location = useLocation();
+  const {productData} = useContext(productDataContext);
+  let [product,setProduct] =useState(()=>{
+   return productData.find(item=>item.id == params.productId)
+  })  ;
+  console.log(product)
   function ScrolltoTop() {
     window.scroll(0, 0);
   }
@@ -12,35 +21,30 @@ const SingleProduct = () => {
   function handleSizeSelection(size) {
     setSelectedSize(size);
   }
+  function handleImageClick(e){
+    let img = e.target;
+    console.log(img.src);
+  }
   return (
     <div className="min-h-[100dvh] text-black px-2 md:mx-auto md:w-[100vw] py-3 md:flex justify-center items-start gap-10">
-      <div className="product-images flex-col md:flex-row flex gap-2 justify-start items-center">
+      <div className="product-images flex-col flex gap-2 justify-start items-center">
         <img
-          src={p1}
+          src={product.imageUrls[0]}
           alt="Product img"
-          className="md:w-[450px] w-full  h-[70vh] object-contain shadow-md py-2"
+          className=" w-[100vw]  h-[70vh] object-contain shadow-md py-2"
         />
-        <div className="images flex flex-row flex-wrap gap-2 md:flex-col md:w-[200px]">
-          <img
-            src={p1}
-            alt="Product img"
-            className="w-[100px] h-[80px] object-contain shadow-md py-2 cursor-pointer hover:border caret-transparent"
-          />
-          <img
-            src={p1}
-            alt="Product img"
-            className="w-[100px] h-[80px] object-contain shadow-md py-2 cursor-pointer hover:border caret-transparent"
-          />
-          <img
-            src={p1}
-            alt="Product img"
-            className="w-[100px] h-[80px] object-contain shadow-md py-2 cursor-pointer hover:border caret-transparent"
-          />
-          <img
-            src={p1}
-            alt="Product img"
-            className="w-[100px] h-[80px] object-contain shadow-md py-2 cursor-pointer hover:border caret-transparent"
-          />
+        <div className="images flex flex-wrap gap-2  ">
+         { product.imageUrls.map((img,index)=>(
+           <img
+           onClick={handleImageClick}
+           key={index}
+             src={img}
+             alt="Product img"
+             className="w-[100px] h-[80px] object-contain shadow-md py-2 cursor-pointer hover:border caret-transparent"
+           />
+         ))
+          }
+        
         </div>
       </div>
       <div className="productDetails mt-3">
@@ -53,27 +57,27 @@ const SingleProduct = () => {
           </h3>
         </div>
         <h1 className="product-name text-[1.15rem] font-medium">
-          Embroidered Lace Mock Two-Piece Gown with Jacket
-        </h1>
+        {product.title}
+         </h1>
         <p className="font-medium text-[1.05rem] mt-2">
-          <span className="font-normal pr-2">PKR</span>$229.00
+          <span className="font-normal pr-2">PKR</span>{product.price}
         </p>
         <div className="sizes mt-2">
           <h4 className="uppercase font-medium text-[0.85rem] text-gray-800">
             Select a Size:
           </h4>
           <div className="available flex flex-wrap gap-2 ">
-            {["XS", "S", "M", "L", "XL"].map((size) => (
+            {product.variants.filter(p=>p.stock > 0).map((varaint) => (
               <span
-                key={size}
+                key={varaint.size}
                 className={`border size border-[gray] hover:border-black flex justify-center items-center rounded text-sm  cursor-pointer w-[150px] md:w-10 h-7 text-center ${
-                  selectedSize === size
+                  selectedSize === varaint.size
                     ? "bg-black text-white"
                     : "bg-transparent"
                 }`}
-                onClick={() => handleSizeSelection(size)}
+                onClick={() => handleSizeSelection(varaint.size)}
               >
-                {size}
+                {varaint.size}
               </span>
             ))}
           </div>
