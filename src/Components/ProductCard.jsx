@@ -31,11 +31,7 @@ const ProductCard = ({ imgUrl, discount, brand, title, isShippingFree, originalP
         onClick={handleIconClick}
       />
       <div className="imgContainer bg-gray-400 h-[75%] relative group overflow-hidden">
-        <FaCartPlus
-          className="absolute icon-cart z-40 bottom-1 right-2 cursor-pointer text-[blue]"
-          size={30}
-          onClick={handleIconClick}
-        />
+       
         <img
           src={imgUrl}
           alt="Product"

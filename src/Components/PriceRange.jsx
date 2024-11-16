@@ -4,13 +4,13 @@ import Slider from '@mui/material/Slider';
 import { FaChevronDown } from 'react-icons/fa6';
 
 function valuetext(value) {
-  return `${value}°C`;
+  return `${value}`;
 }
 
 const minDistance = 100;
 
-export default function MinimumDistanceSlider() {
-  const [value2, setValue2] = React.useState([1, 10000]);
+export default function MinimumDistanceSlider({ setFilter  }) {
+  const [value2, setValue2] = React.useState([0, 15000]);
   const [isExpanded, setIsExpanded] = React.useState(true);
 
   const handleChange2 = (event, newValue, activeThumb) => {
@@ -20,7 +20,7 @@ export default function MinimumDistanceSlider() {
 
     if (newValue[1] - newValue[0] < minDistance) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 100 - minDistance);
+        const clamped = Math.min(newValue[0], 10000 - minDistance);
         setValue2([clamped, clamped + minDistance]);
       } else {
         const clamped = Math.max(newValue[1], minDistance);
@@ -29,6 +29,12 @@ export default function MinimumDistanceSlider() {
     } else {
       setValue2(newValue);
     }
+
+    // Update the parent with the new price range
+    setFilter((prevFilters) => ({
+      ...prevFilters,
+      priceRange: newValue,
+    }));
   };
 
   const toggleExpansion = () => {
@@ -50,13 +56,13 @@ export default function MinimumDistanceSlider() {
       {isExpanded && (
         <Box sx={{ width: '100%' }}>
           <Slider
-            getAriaLabel={() => 'Minimum distance shift'}
+            getAriaLabel={() => 'Price Range'}
             value={value2}
             onChange={handleChange2}
             valueLabelDisplay="auto"
             getAriaValueText={valuetext}
             min={0}
-            max={1000}
+            max={10000}
             disableSwap
           />
         </Box>

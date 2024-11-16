@@ -45,11 +45,11 @@ const ProductForm = ({ action, data }) => {
   const Gender = ["Select", "Male", "Female", "Neuter"];
   useEffect(()=>{
     setCategories(()=>{
-    let dt = contextCategories?.filter((cat)=>cat.gender === "Female");
+    let dt = contextCategories?.filter((cat)=>cat.gender === productData.gender);
       let final = ["Select",...dt];
       return final
     })
-  },[contextCategories])
+  },[contextCategories,productData.gender])
 
   const handleFileChange = (e) => {
     // Only when Action is Add
@@ -118,6 +118,7 @@ const ProductForm = ({ action, data }) => {
     e.preventDefault();
     setUploading(true);
     //  if action is Add
+    // window.scrollY(0,0)
     if(action==="add")
     {
       await writeProduct();

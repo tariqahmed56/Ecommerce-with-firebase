@@ -5,7 +5,8 @@ export let productDataContext = createContext();
 export default function productDataProvider ({children}) {
     let [contextCategories,setContextCategories] = useState([]);
     const categoriesCollectionRef = collection(db, "categories");
-
+    let [productData,setProductData] = useState([]);
+    let [productLoading,setProductLoading] = useState(false);
       useEffect(()=>{
         function getCategories() {
             const unsubscribeCategories = onSnapshot(categoriesCollectionRef, (snapshot) => {
@@ -19,7 +20,7 @@ export default function productDataProvider ({children}) {
     
 
     return(
-        <productDataContext.Provider value={{contextCategories , setContextCategories}}>
+        <productDataContext.Provider value={{contextCategories , setContextCategories , productData ,setProductData , productLoading , setProductLoading}}>
             {children}
         </productDataContext.Provider>
     )

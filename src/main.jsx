@@ -30,13 +30,13 @@ import AddCategory from './Pages/AdminPanel/Categories/AddCategory.jsx';
 import CategoryList from './Pages/AdminPanel/Categories/CategoryList.jsx';
 import ForLoggedInUser from './Components/Protection/ForLoggedInUser.jsx';
 import PrivateRoutes from './Components/Protection/PrivateRoutes.jsx';
-
+import Men from './Pages/Men/Men.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
       <Route index element={<Home />} />
       <Route path="store/:category" element={<Allproducts />} />
-      <Route path=":category/:productId" element={<SingleProduct />} />
+      <Route path="store/:category/:productId" element={<SingleProduct />} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
       <Route path="cart" element={<Cart />} />
