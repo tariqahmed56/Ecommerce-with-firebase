@@ -7,7 +7,7 @@ function valuetext(value) {
   return `${value}`;
 }
 
-const minDistance = 100;
+const minDistance = 1000;
 
 export default function MinimumDistanceSlider({ setFilter  }) {
   const [value2, setValue2] = React.useState([0, 15000]);
@@ -20,7 +20,7 @@ export default function MinimumDistanceSlider({ setFilter  }) {
 
     if (newValue[1] - newValue[0] < minDistance) {
       if (activeThumb === 0) {
-        const clamped = Math.min(newValue[0], 10000 - minDistance);
+        const clamped = Math.min(newValue[0], 15000 - minDistance);
         setValue2([clamped, clamped + minDistance]);
       } else {
         const clamped = Math.max(newValue[1], minDistance);
@@ -62,7 +62,7 @@ export default function MinimumDistanceSlider({ setFilter  }) {
             valueLabelDisplay="auto"
             getAriaValueText={valuetext}
             min={0}
-            max={10000}
+            max={15000}
             disableSwap
           />
         </Box>

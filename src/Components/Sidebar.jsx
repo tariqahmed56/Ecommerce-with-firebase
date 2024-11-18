@@ -1,31 +1,40 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Input from './Input';
 import PriceRange from './PriceRange';
-import { FaChevronDown } from 'react-icons/fa6';
+import { FaChevronDown, FaX } from 'react-icons/fa6';
 import { useLocation } from 'react-router-dom';
 
-const Sidebar = ({ genre , allCategories , gender , setFilters , filters }) => {
-  const [checked, setChecked] = useState(false);
+const Sidebar = ({ genre , allCategories , gender , setFilters , filters , closeSideBar , isSideBarOpen}) => {
   const [categories,setCategories] = useState([]);
   useEffect(()=>{
+    setCategories([]);
+    setFilters({
+      categories: [],
+      genders: [],
+      brands: [],
+      priceRange:[0,15000]
+    })
+  },[])
+  useEffect(()=>{
+    console.log('changed')
     if(gender === "Neuter"){
       console.log(gender)
-      setCategories( allCategories.filter(
-        (cats, index, self) =>
-          index === self.findIndex((p) => p.category === cats.category)
-      ));
+      setCategories(allCategories);
     }else{
       setCategories(()=>allCategories.filter(cats=>cats.gender === gender));
     }
-  },[allCategories,gender])
-  const brands = [
+  },[allCategories,gender]);
+ 
+  const [brands,setBrands] = useState([
     { brand: "Mendeez" }, 
     { brand: "Zeroyya" },
     { brand: "Zara" },
     { brand: "Adidas" },
     { brand: "Nike" },
     { brand: "H&M" }
-  ];
+  ]);
+  
+ 
   const [categoryDropdown, setCategoryDropdown] = useState(true);
   const [brandsDropdown, setBrandsDropdown] = useState(true);
 
@@ -37,16 +46,8 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters }) => {
     console.log(filters)    
   
     setFilters((prevFilters) => {
-      if (filterField === "priceRange") {
-        const [key, price] = value.split(":"); 
-        return {
-          ...prevFilters,
-          priceRange: {
-            ...prevFilters.priceRange,
-            [key]: parseInt(price, 10), 
-          },
-        };
-      } else {
+      // Price Range filter is handled inisde priceRange component;
+      if (filterField !== "priceRange") {
         const updatedField = prevFilters[filterField].includes(value)
           ? prevFilters[filterField].filter((item) => item !== value) 
           : [...prevFilters[filterField], value];                   
@@ -54,16 +55,21 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters }) => {
         return {
           ...prevFilters,
           [filterField]: updatedField,
-        };
+        }; 
       }
     });
     console.log(filters)    
   }
   
   return (
-    <div className="md:min-w-[250px]  md:max-w-[320px] md:w-[320px] w-full px-5 text-black  pt-4 py-8 mt-12 relative  min-h-[100dvh]">
+    <div 
+    className={`md:min-w-[250px]  md:max-w-[320px] md:w-[320px] absolute ${isSideBarOpen ? '-left-[0%]' : '-left-[100%]'} transition-all  top-[60px] md:top-0 z-10 md:left-0 shadow-2xl md:shadow-none md:bg-none w-full px-5 text-black  pt-4 py-10 mt-12 bg-white md:relative  min-h-[100dvh]`}>
+      <FaX 
+      onClick={closeSideBar}
+       size={30}
+       className='md:hidden block text-2xl shadow-inner font-bold font-play absolute right-5 top-1 text-red-700 cursor-pointer'/>
       <h1 
-        className=" py-2 border-t border-gray-800 text-sm font-semibold flex items-center justify-between cursor-pointer hover:text-gray-600 transition duration-200" 
+        className="mt-10 md:mt-1 py-2 border-t border-gray-800 text-sm font-semibold flex items-center justify-between cursor-pointer hover:text-gray-600 transition duration-200" 
         onClick={handleCategoryDropdown}
       >
         {genre || "Categories"}

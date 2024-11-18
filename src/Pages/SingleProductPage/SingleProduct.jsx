@@ -1,126 +1,110 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import p1 from "../../assets/p1.webp";
 import { CiHeart } from "react-icons/ci";
-import { useLocation, useParams } from "react-router-dom";
-import productDataProvider, { productDataContext } from "../../contexts/ProductDataContext";
-import { collection, doc, getDoc, query, where } from "firebase/firestore";
-import { db } from "../../config/firebaseconfig";
+import { useParams, useLocation } from "react-router-dom";
+import { productDataContext } from "../../contexts/ProductDataContext";
+import QuantitySelector from "../../Components/QuantitySelector";
+
 const SingleProduct = () => {
-  const {productId} = useParams();
-  const location = useLocation();
-  const {productData , setProductData} = useContext(productDataContext);
-  let main = useRef();
-  console.log(productData);
-  let [product,setProduct] =useState(null)  ;
-  function ScrolltoTop() {
-    window.scroll(0, 0);
-  }
+  const { productId } = useParams();
+  const { productData } = useContext(productDataContext);
+  const [product, setProduct] = useState(null);
+  const [selectedSize, setSelectedSize] = useState("");
+  const mainImageRef = useRef();
+
   useEffect(() => {
-    ScrolltoTop();
-      let p = productData?.find((item)=>item.id === productId);  
-        setProduct(p);
-        console.log(product);
-       
-  }, [productId]);
-   const [selectedSize, setSelectedSize] = useState("");
-  function handleSizeSelection(size) {
+    window.scrollTo(0, 0); // Scroll to top on component mount
+    const selectedProduct = productData?.find((item) => item.id === productId);
+    setProduct(selectedProduct);
+  }, [productId, productData]);
+
+  const handleSizeSelection = (size) => {
     setSelectedSize(size);
-  }
-  function handleImageClick(e){
-    let img = e.target;
-    console.log(img.src);
-    main.current.src = img.src;
-  }
-  return (
-    product ? 
-    <div className="min-h-[100dvh] text-black px-2 md:mx-auto md:w-[100vw] py-3 md:flex justify-center items-start gap-10">
-      <div className="product-images flex-col w-[600px] flex gap-2 justify-start items-center">
+  };
+
+  const handleImageClick = (e) => {
+    mainImageRef.current.src = e.target.src;
+  };
+
+  return product ? (
+    <div className="min-h-[100vh] text-black px-4 py-6 md:px-10 flex flex-col md:flex-row gap-8">
+      <div className="w-full md:w-[50%] flex flex-col lg:flex-row-reverse items-center gap-4">
+        <div className="md:h-[500px] h-auto md:w-[70%] flex  justify-center items-center bg-[#717070]">
         <img
+          ref={mainImageRef}
           src={product?.imageUrls[0]}
-          alt="Product img"
-          className=" max-w-full max-h-auto min-h-[60vh] object-cover  shadow-md"
-          ref={main}
+          alt="Main image"
+          className="w-full h-auto max-h-[500px] object-contain shadow-lg "
         />
-        <div className="images flex flex-wrap gap-2  ">
-         { product?.imageUrls?.map((img,index)=>(
-          <div className="w-[100px] h-[80px] relative">
+        </div>
+        <div className="flex lg:flex-col gap-3 overflow-x-auto mx-2 p-2">
+          {product?.imageUrls.map((img, index) => (
             <img
-            onClick={handleImageClick}
-            key={index}
+              key={index}
               src={img}
-              alt="Product img"
-              className="w-full h-full  object-cover shadow-md  cursor-pointer hover:border caret-transparent"
+              alt="Thumbnail"
+              onClick={handleImageClick}
+              className="w-[80px] h-[80px] object-cover rounded-lg shadow-md cursor-pointer hover:ring-2 hover:ring-black"
             />
-          </div>
-         ))
-          }
-        
+          ))}
         </div>
       </div>
-      <div className="productDetails mt-3">
-        <div className="tags flex gap-3">
-          <h3 className="border border-gray px-2 py-1 text-sm rounded-lg">
-            {product.brand}
-          </h3>
-          <h3 className="border border-gray px-2 py-1 text-sm rounded-lg">
-            {product.category}
-          </h3>
+
+      <div className="w-full md:w-[50%] flex flex-col gap-1 md:px-6">
+        <div className="flex gap-2">
+          <span className="px-3 py-1 bg-gray-200 text-sm rounded-full">{product.brand}</span>
+          <span className="px-3 py-1 bg-gray-200 text-sm rounded-full">{product.category}</span>
         </div>
-        <h1 className="product-name text-[1.15rem] font-medium px-3 text-wrap">
-        {product?.title}
-         </h1>
-        <p className="font-medium text-[1.05rem] mt-2">
-          <span className="font-normal pr-2">PKR</span>{selectedSize ? product.variants.find((vr)=>vr.size === selectedSize).price : product?.price}
+
+        <h1 className="text-xl font-semibold">{product?.title}</h1>
+
+        <p className="text-lg font-semibold text-gray-800">
+          PKR{" "}
+          {selectedSize
+            ? product.variants.find((variant) => variant.size === selectedSize).price
+            : product?.price}
         </p>
-        <div className="sizes mt-2">
-          <h4 className="uppercase font-medium text-[0.85rem] text-gray-800">
-            Select a Size:
-          </h4>
-          <div className="available flex flex-wrap gap-2 ">
-            {product?.variants.filter(p=>p?.stock > 0).map((varaint) => (
+
+        <div>
+          <h4 className="text-sm font-medium text-gray-700">Select a Size:</h4>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {product?.variants.filter((variant) => variant.stock > 0).map((variant) => (
               <span
-                key={varaint?.size}
-                className={`border size border-[gray] hover:border-black flex justify-center items-center rounded text-sm  cursor-pointer w-[150px] md:w-10 h-7 text-center ${
-                  selectedSize === varaint?.size
-                    ? "bg-black text-white"
-                    : "bg-transparent"
+                key={variant.size}
+                onClick={() => handleSizeSelection(variant.size)}
+                className={`px-4 py-2 border rounded-lg text-sm cursor-pointer transition-all ${
+                  selectedSize === variant.size
+                    ? "bg-black text-white border-black"
+                    : "bg-white text-gray-700 border-gray-300 hover:border-black"
                 }`}
-                onClick={() => handleSizeSelection(varaint?.size)}
               >
-                {varaint?.size}
+                {variant.size}
               </span>
             ))}
           </div>
         </div>
-        <div className="mt-3">
-          <h4 className="uppercase font-semibold text-[0.75rem] text-gray-800 mb-1">
-            Quantity:
-          </h4>
-          <div className="quantity w-[80%] sm:w-[200px] border border-black rounded flex cursor-pointer">
-            <div className="border-r-[1px] border-black basis-1/3 flex justify-center items-center text-sm font-semibold  h-7">
-              -
-            </div>
-            <div className="basis-1/3 flex justify-center items-center text-sm font-semibold h-7">
-              1
-            </div>
-            <div className="border-l-[1px] border-black basis-1/3 flex justify-center items-center text-sm font-semibold  h-7">
-              +
-            </div>
-          </div>
+
+        <div>
+          <h4 className="text-sm font-medium text-gray-700">Quantity:</h4>
+           <QuantitySelector/>
         </div>
-        <div className="flex w-full justify-start gap-4 items-center">
-          <button className="w-[75%] md:w-[200px] py-2 text-sm bg-[#2c2b2b] text-white shadow-md rounded mt-2">
+
+        <div className="flex gap-4 items-center">
+          <button className="w-full md:w-auto px-6 py-3 bg-black text-white rounded-lg shadow-lg hover:bg-gray-800">
             Add to Cart
           </button>
-          <CiHeart size={30} className="w-[30px] cursor-pointer" />
+          <CiHeart size={30} className="text-gray-700 cursor-pointer hover:text-black" />
         </div>
-        <h2 className="font-semibold mt-2">Description:</h2>
-        <p className="border border-gray-600 text-wrap w-[90%] md:w-[350px] rounded px-2 py-2 text-sm">
-          {product.description}
-        </p>
+
+        <div>
+          <h4 className="text-lg font-semibold">Description:</h4>
+          <p className="text-sm text-gray-700 mt-2">{product.description}</p>
+        </div>
       </div>
     </div>
-    : <h1 className="text-black text-xl">loading...</h1>
+  ) : (
+    <div className="flex justify-center items-center min-h-[100vh]">
+      <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
+    </div>
   );
 };
 

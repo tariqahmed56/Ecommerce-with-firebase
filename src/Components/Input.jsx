@@ -10,7 +10,8 @@ const Input = ({
   disabled = false,
   name,
   width,
-  ...rest 
+  radioStyle,
+  checked
 }) => {
   return (
     <div className={`mb-1 `}>
@@ -24,8 +25,7 @@ const Input = ({
         placeholder={placeholder}
         disabled={disabled}
         name={name}
-        className={` px-3 py-2 cursor-pointer border rounded-md focus:outline-none appearance-auto ${width ? width : ""} cursor-pointer  ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''} ${className}`}
-        {...rest}
+        className={` px-3 py-2 ${type === 'checkbox' && 'accent-blue-700 appearance-none w-4 h-4 checkBox'} cursor-pointer border rounded-md focus:outline-none appearance-auto ${width ? width : ""} cursor-pointer  ${disabled ? 'bg-gray-200 cursor-not-allowed' : ''} ${className}`}
       />
            { type === 'checkbox' ? <span className='block'>{label}</span> : ''}
 

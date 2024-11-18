@@ -30,7 +30,6 @@ import AddCategory from './Pages/AdminPanel/Categories/AddCategory.jsx';
 import CategoryList from './Pages/AdminPanel/Categories/CategoryList.jsx';
 import ForLoggedInUser from './Components/Protection/ForLoggedInUser.jsx';
 import PrivateRoutes from './Components/Protection/PrivateRoutes.jsx';
-import Men from './Pages/Men/Men.jsx'
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
@@ -60,7 +59,9 @@ const router = createBrowserRouter(
           <Route path="add-category" element={<AddCategory />} />
           <Route path="category-list" element={<CategoryList />} />
         </Route>
+
       </Route>
+
     </Route>
   )
 );

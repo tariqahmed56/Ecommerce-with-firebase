@@ -357,7 +357,7 @@ const ProductForm = ({ action, data }) => {
             You need to add at least 4 images. Pay attention to the quality of
             the pictures you add, comply with the background color standards.
             Pictures must be in certain dimensions. Notice that the product
-            shows all the details
+            shows all the details.
           </p>
           {PreviewImages && (
             <div className="flex flex-wrap mt-2 gap-2 px-3">

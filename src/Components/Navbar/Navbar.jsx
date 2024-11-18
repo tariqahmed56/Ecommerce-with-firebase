@@ -13,6 +13,18 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNavbar = () => setIsOpen((prev) => !prev);
+  const debounce = (fun,delay) =>{
+    let timerId ;
+    return (...args) =>{
+      clearTimeout(timerId);
+    timerId = setTimeout(()=>fun(...args),delay);
+    }
+  }
+  const handleInput = (e) => {
+    console.log(e.target.value);
+  };
+  const debouncedInputHandler = debounce(handleInput,400);
+
 
   return (
     <nav className="h-[64px] bg-black flex justify-between lg:px-6 items-center px-4 py-2 relative">
@@ -24,7 +36,7 @@ const Navbar = () => {
 
       {/* Mobile & Tablet Navigation */}
       <ul className={`flex gap-3 sm:hidden ${isOpen ? 'flex opacity-100 h-[150px] pointer-events-auto' : " h-0 pointer-events-none opacity-0"} z-50 absolute flex-col bg-black w-full left-0 top-[100%] p-3`}>
-        <li><NavLink to={`store/all-product`}>Home</NavLink></li>
+        <li><NavLink to={`store/all-product`}>Shop</NavLink></li>
         <li><NavLink to="store/men-fashion">Men's Fashion</NavLink></li>
         <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
         <li>
@@ -47,7 +59,7 @@ const Navbar = () => {
 
       {/* Desktop Navigation */}
       <ul className="sm:flex hidden gap-3 text-sm font-light">
-      <li><NavLink to={`store/all-product`}>Home</NavLink></li>
+      <li><NavLink to={`store/all-product`}>Shop</NavLink></li>
         <li><NavLink to="store/men-fashion">Men's Fashion</NavLink></li>
         <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
       {user?.role === 'admin' && <li><NavLink to="admin-panel">Dashboard</NavLink></li>}
@@ -58,7 +70,12 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-3 items-center">
+        <input 
+        onInput={debouncedInputHandler}
+        type="text" 
+        className="bg-black outline-none border rounded-md text-sm  px-2 py-1"/>
         <AiOutlineSearch size={20} className="cursor-pointer" />
+
         <AiOutlineHeart size={20} className="cursor-pointer" />
         {user ? (
           <>

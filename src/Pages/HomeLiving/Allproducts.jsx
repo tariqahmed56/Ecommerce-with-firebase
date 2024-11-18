@@ -1,132 +1,152 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
-import url from '../../assets/home-fashion.jpg';
-import Hero from '../../Components/Hero';
+import React, { useEffect, useState, useContext, useRef } from 'react';
+import { Link, useLocation, useParams } from 'react-router-dom';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../../config/firebaseconfig';
+import { productDataContext } from '../../contexts/ProductDataContext';
 import Sidebar from '../../Components/Sidebar';
 import ProductCard from '../../Components/ProductCard';
-import { Link, useParams } from 'react-router-dom';
-import { productDataContext } from '../../contexts/ProductDataContext';
 import ProductsLoader from '../../Components/PlaceHolderLoaders/ProductsLoader';
-import { collection, getDocs, onSnapshot, query, where } from "firebase/firestore";
-import { db } from '../../config/firebaseconfig';
-
+import Button from '../../Components/Button'
 const Allproducts = () => {
-  const {category} = useParams();
-  let gender = category !== "all-product" ? category.split('-')[0] === "men" ? "Male" : "Female" : "Neuter"; 
-  const {contextCategories , productData , setProductData , productLoading , setProductLoading} = useContext(productDataContext);
-  
+  const { contextCategories, productData, setProductData, productLoading, setProductLoading } = useContext(productDataContext);
+  const location = useLocation();
+  const { category } = useParams();
+  const selectRef = useRef();
+
+  const [gender, setGender] = useState('Neuter');
+  const [filteredData, setFilteredData] = useState([]);
   const [filters, setFilters] = useState({
     categories: [],
     genders: [],
     brands: [],
-    priceRange:[0,15000]
+    priceRange: [0, 15000],
   });
-   useEffect(()=>{
-    function fetchProducts() {
-      const productCollectionRef = collection(db, "products");
-      try {
-        setProductLoading(true);
-    
-        let unsubscribe; 
-    
-        if (category !== "all-product") {
-          console.log(category);
-          console.log(gender);
-          const q = query(productCollectionRef, where("gender", "==", gender));
-    
-          unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const products = querySnapshot.docs.map((doc) => (doc.data()));
-            setProductData(products);
-            setProductLoading(false);
-          });
-        } else {
-          console.log("Fetching all products");
-    
-          unsubscribe = onSnapshot(productCollectionRef, (querySnapshot) => {
-            const products = querySnapshot.docs.map((doc) => (doc.data()));
-            console.log(products)
-            setProductData(products);
-            setProductLoading(false);
-          });
-        }
-    
-        return unsubscribe; // Return the unsubscribe function for cleanup
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setProductLoading(false); // Ensure loading state is updated
-      }
-    }
-   
-      return fetchProducts();
-   },[category]);
-   const filtereDataFunc = useCallback(()=>{
-    const filteredProducts = productData.filter((product) => {
+//  gender check on route change
+  useEffect(() => {
+    if (category === 'all-product') setGender('Neuter');
+    else if (category === 'men-fashion') setGender('Male');
+    else setGender('Female');
+  }, [category]);
+    // Data fetching 
+  useEffect(() => {
+    const fetchProducts = () => {
+      const productCollectionRef = collection(db, 'products');
+      setProductLoading(true);
+      const unsubscribe = onSnapshot(productCollectionRef, (querySnapshot) => {
+        const products = querySnapshot.docs.map((doc) => doc.data());
+        setProductData(products);
+        setFilteredData(products);
+        setProductLoading(false);
+      });
+
+      return () => unsubscribe();
+    };
+
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    const filtereDataFunc = () => {
       const { categories, genders, brands, priceRange } = filters;
-      
-// These conditions check if a filter is chosen or not.
-// - If no filter is chosen, it acts like all items are allowed (no effect).
-// - If a filter is chosen, it checks if the item matches the chosen values using the `includes` method.
-
-      const categoryMatch = categories.length ? categories.includes(product.category) : true;
-      const genderMatch = genders.length ? genders.includes(product.gender) : true;
-      const brandMatch = brands.length ? brands.includes(product.brand) : true;
       const [minPrice, maxPrice] = priceRange;
-      const priceMatch = Number(product.price) >= minPrice && Number(product.price)<= maxPrice;
-    
-      return categoryMatch && genderMatch && brandMatch && priceMatch;
+
+      const filteredProducts = productData.filter((product) => {
+        const categoryMatch = categories.length ? categories.includes(product.category) : true;
+        const genderMatch = category === 'all-product' ?  true : product.gender === gender;
+        const brandMatch = brands.length ? brands.includes(product.brand) : true;
+        const priceMatch = Number(product.price) >= minPrice && Number(product.price) <= maxPrice;
+
+        return categoryMatch && genderMatch && brandMatch && priceMatch;
+      });
+
+      setFilteredData(filteredProducts);
+    };
+
+    filtereDataFunc();
+  }, [filters, productData]);
+
+  // reset inputs and filters
+  useEffect(() => {
+    setFilters({
+      categories: [],
+      genders: [],
+      brands: [],
+      priceRange: [0, 15000],
     });
-    console.log(filteredProducts)
-   },[filters.categories,filters.brands,filters.priceRange]);
-  
+    let checkBoxes = document.querySelectorAll('.checkBox');
+    checkBoxes.forEach((checkbox)=>{
+      checkbox.checked = false;
+    });
+   selectRef.current.value = "Sort By"
+  }, [location.pathname]);
 
-  
-  
-  
+
+  const HandleSortChange = (event) => {
+    const sortType =  event.target.value;
+
+    const sortedData = [...filteredData];
+    if (sortType === 'High to Low') sortedData.sort((a, b) => Number(b.price) - Number(a.price));
+    else if (sortType === 'Low to High') sortedData.sort((a, b) => Number(a.price) - Number(b.price));
+
+    setFilteredData(sortedData);
+  };
+  const [isSideBarOpen,setIsSideBarOpen] = useState(false);
+  function HandleSideBar(){
+   setIsSideBarOpen(prev=>!prev);
+  }
+
   return (
-    <div className='text-black min-h-screen flex flex-col px-[30px]'>
-      <div className="py-3 font-bold">path history goes here</div>
-      <div className="main-containt flex">
-     <Sidebar gender={gender} allCategories={contextCategories} genre={"Categories"} filters={filters} setFilters={setFilters}/>
-     <div className="flex flex-col gap-6">
-      <div className=" w-full flex justify-end px-5">
-        <select className='bg-gray-300 px-3 py-3 outline-none border cursor-pointer'>
-        <option value="Price Low to High"  className='cursor-pointer uppercase'>
-            SORT BY
-          </option>
-        <option value="Price Low to High"  className='cursor-pointer uppercase'>
-              PRICE LOW TO HIGH
-          </option>
-          <option value="Price High to Low" className='cursor-pointer uppercase'>
-           PRICE HIGH TO LOW
-          </option>
-         
-          <option value="Date Old To New" className='cursor-pointer'>
-          DATE OLD TO NEW
-          </option>
-          <option value="Date New To Old" className='cursor-pointer'>
-            DATE NEW TO OLD
-          </option>
-        </select>
+    <div className="text-black min-h-screen flex flex-col px-[30px]">
+      {/* Breadcrumbs */}
+      <div className=" font-light flex text-black gap-3 py-7">
+        <Link to="/store/all-product" className="hover-effect-bread-crums font-play text-xl tracking-[5px] pb-2"> store</Link>
+        {category === 'men-fashion' ? (
+          <Link to="/store/men-fashion" className="hover-effect-bread-crums font-play text-xl tracking-[5px] pb-2"> Men Fashion</Link>
+        ) : category === 'women-fashion' ? (
+          <Link to="/store/women-fashion" className="hover-effect-bread-crums font-play text-xl tracking-[5px] pb-2"> Women Fashion</Link>
+        ) : null}
       </div>
-     <div className="products flex flex-wrap gap-5 items-center justify-center pb-7 ">
-    {productLoading ? <ProductsLoader/> : productData?.map((item)=>(
-      <Link to={`/store/${category}/${item.id}`}>
-      <ProductCard
-      key={item.id}
-      imgUrl={item.imageUrls[0]}
-      title={item.title}
-      brand={item.brand}
-      actualPrice={item.price}
-      originalPrice={Number(item.price) + 500}
-      stock={item.variants.reduce((acc,curr)=>acc+Number(curr.stock),0)}
-      id={item.id}
-    />
-      </Link>
-    ))}
-     </div>
-      </div>
-      </div>
-     </div>
-  )
-}
 
-export default Allproducts
+      <div className="main-containt flex w-full">
+        <Sidebar closeSideBar={HandleSideBar} isSideBarOpen={isSideBarOpen}  gender={gender} allCategories={contextCategories} genre="Categories" filters={filters} setFilters={setFilters} />
+        <div className="flex flex-col gap-6  w-full">
+          <div className="w-full flex justify-evenly md:justify-end px-5">
+            <button onClick={HandleSideBar} className='block md:hidden px-10 py-1 border  text-black font-play tracking-[5px] text-xl rounded-sm'>filters</button>
+            <select
+              className="sort-select px-3 py-3 outline-none border cursor-pointer font-play tracking-[3px] text-xl rounded-sm"
+              onChange={HandleSortChange}
+              ref={selectRef}
+            >
+              <option value="Sort By" className="cursor-pointer uppercase">SORT BY PRICE</option>
+              <option value="Low to High" className="cursor-pointer uppercase"> LOW TO HIGH</option>
+              <option value="High to Low" className="cursor-pointer uppercase"> HIGH TO LOW</option>
+            </select>
+          </div>
+
+          <div className="products flex flex-wrap gap-5 items-center justify-center pb-7">
+            {productLoading ? (
+              <ProductsLoader />
+            ) : (
+              filteredData.map((item) => (
+                <Link to={`/store/${category}/${item.id}`} key={item.id}>
+                  <ProductCard
+                    imgUrl={item.imageUrls[0]}
+                    title={item.title}
+                    brand={item.brand}
+                    actualPrice={item.price}
+                    originalPrice={Number(item.price) + 500}
+                    stock={item.variants.reduce((acc, curr) => acc + Number(curr.stock), 0)}
+                    isShippingFree={item.deliveryCharges === 0}
+                    id={item.id}
+                  />
+                </Link>
+              ))
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Allproducts;
