@@ -19,7 +19,7 @@ const Carousel = ({images}) => {
 
  
   return (
-    <div className="w-full md:px-4 py-5 overflow-hidden">
+    <div className="w-full md:px-0 mb-2 -top-2 relative  overflow-hidden z-20">
     <Swiper
       className="flex p-3 overflow-hidden"
       spaceBetween={20}
@@ -37,11 +37,11 @@ const Carousel = ({images}) => {
     >
         {
             images.map((img,idx)=>(
-      <SwiperSlide className="shrink-0 w-full md:w-[70%] flex justify-center rounded-lg" key={idx}>
+      <SwiperSlide className="shrink-0 w-full md:w-[70%] flex justify-center" key={idx}>
         <img
-          src={img}
+          src={img.url}
           alt="men-style"
-          className="w-full md:h-[60vh] h-[40vh] object-cover rounded-md"
+          className="w-full md:h-[70vh] h-[40vh] object-cover "
         />
       </SwiperSlide>
             ))

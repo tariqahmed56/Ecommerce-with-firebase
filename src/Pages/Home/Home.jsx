@@ -1,4 +1,4 @@
-import React, { useState , useEffect , memo, useCallback} from 'react'
+import React, { useState , useEffect , memo, useCallback  , useContext} from 'react'
 import Hero from '../../Components/Hero.jsx'
 import { Link } from 'react-router-dom'
 import Title from '../../Components/Navbar/Title.jsx'
@@ -8,8 +8,10 @@ import homeinterior from '../../assets/category/home-fashion.jpg'
 import Card from '../../Components/Card.jsx'
 import menCardImg from '../../assets/card.jpg'
 import womenCardImg from '../../assets/card1.jpg'
+import productDataContext from '../../contexts/ProductDataContext' 
 const Home = () => {
   let [visibility,setVisibilty] = useState(true);
+  const {productData} = useContext(ProductDataContext)
   let scrollThreshold = 300;
   const scrollToTop = () => {
     window.scrollTo({
@@ -38,28 +40,23 @@ const Home = () => {
     id:1,
     name:"Men's Fashion",
     img: menFashion,
-    path: '/men-fashion'
+    path: 'store/all-products/men-fashion'
   },
   {
     id:2,
     name: "Women's Fashion",
     img:womenFashion,
-    path: '/women-fashion'
+    path: 'store/all-products/men-fashion'
   },
-  {
-    id:3,
-    name: "All Products",
-    img:homeinterior,
-    path:'store'
-  }
+  
 ] 
   return (
     <div className='home flex flex-col relative'>
     <Hero/>
      <div className="Categories relative flex flex-col md:flex-row justify-center">    
       {categories.map((cat)=>(
-        <Link to={cat.path} className='md:basis-1/3 basis-[100%] ' key={cat.id}>
-        <div className="h-[200px] md:h-[400px] bg-cover bg-top relative" style={{backgroundImage:`url(${cat.img})`}} key={cat.id}> 
+        <Link to={cat.path} className='md:basis-1/2 basis-[100%] ' key={cat.id}>
+        <div className="h-[200px] md:min-h-[400px] md:max-h-[600px] md:h-[500px] bg-cover bg-top relative" style={{backgroundImage:`url(${cat.img})`}} key={cat.id}> 
         <p className='absolute top-9 left-5 decoration-white p-2 font-bold text-lg tracking-widest cursor-pointer'>0{cat.id}</p>
         <p className="text text-[2.5rem] absolute bottom-3 font-bold left-0 px-5 leading-[45px] flex md:flex-col gap-4 flex-wrap">
           <span className="block">{cat.name.split(' ')[0]}</span> 

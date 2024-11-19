@@ -7,7 +7,7 @@ import Sidebar from '../../Components/Sidebar';
 import ProductCard from '../../Components/ProductCard';
 import ProductsLoader from '../../Components/PlaceHolderLoaders/ProductsLoader';
 import Button from '../../Components/Button'
-const Allproducts = () => {
+const Allproducts = React.memo(() => {
   const { contextCategories, productData, setProductData, productLoading, setProductLoading } = useContext(productDataContext);
   const location = useLocation();
   const { category } = useParams();
@@ -29,21 +29,8 @@ const Allproducts = () => {
   }, [category]);
     // Data fetching 
   useEffect(() => {
-    const fetchProducts = () => {
-      const productCollectionRef = collection(db, 'products');
-      setProductLoading(true);
-      const unsubscribe = onSnapshot(productCollectionRef, (querySnapshot) => {
-        const products = querySnapshot.docs.map((doc) => doc.data());
-        setProductData(products);
-        setFilteredData(products);
-        setProductLoading(false);
-      });
-
-      return () => unsubscribe();
-    };
-
-    fetchProducts();
-  }, []);
+    setFilteredData(productData);
+  }, [productData,setProductData]);
 
   useEffect(() => {
     const filtereDataFunc = () => {
@@ -147,6 +134,6 @@ const Allproducts = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Allproducts;

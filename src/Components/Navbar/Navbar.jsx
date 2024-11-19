@@ -41,7 +41,6 @@ const Navbar = () => {
         <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
         <li>
           <div className="actions flex gap-4">
-            <AiOutlineSearch size={25} />
             <AiOutlineHeart size={25} />
             {user ? (
               <NavLink to="profile"><FaUser size={25} /></NavLink>
@@ -70,12 +69,6 @@ const Navbar = () => {
       </div>
 
       <div className="flex gap-3 items-center">
-        <input 
-        onInput={debouncedInputHandler}
-        type="text" 
-        className="bg-black outline-none border rounded-md text-sm  px-2 py-1"/>
-        <AiOutlineSearch size={20} className="cursor-pointer" />
-
         <AiOutlineHeart size={20} className="cursor-pointer" />
         {user ? (
           <>
