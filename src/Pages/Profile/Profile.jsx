@@ -1,11 +1,15 @@
 import React, { useContext } from 'react';
 import profile from '../../assets/defaultProfile.jpg';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../contexts/AuthContext';
 
 const Profile = () => {
   const { LogOut , user } = useContext(AuthContext);
-
+  const navigate = useNavigate();
+  const HandleSingOut = () =>{
+    LogOut();
+      navigate('/')
+  }
   return (
     <div className="container  mx-auto flex flex-col justify-center items-center text-sm text-gray-800 min-h-[90vh] py-10 px-4">
       <div className="flex flex-col items-center">
@@ -13,7 +17,7 @@ const Profile = () => {
         <h1 className="mt-4 text-xl font-semibold">{user ? user.email : "Welcome"}</h1>
         <button
         className="mt-6 px-5 py-2 bg-red-500 text-white font-medium rounded-lg shadow-md hover:bg-red-600 transition-all duration-200 ease-in-out"
-        onClick={LogOut}
+        onClick={HandleSingOut}
       >
         Sign Out
       </button>

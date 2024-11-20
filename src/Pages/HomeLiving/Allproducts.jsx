@@ -123,7 +123,7 @@ const Allproducts = React.memo(() => {
                     actualPrice={item.price}
                     originalPrice={Number(item.price) + 500}
                     stock={item.variants.reduce((acc, curr) => acc + Number(curr.stock), 0)}
-                    isShippingFree={item.deliveryCharges === 0}
+                    isShippingFree={item.deliveryCharges == 0}
                     id={item.id}
                   />
                 </Link>

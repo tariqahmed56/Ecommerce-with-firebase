@@ -72,7 +72,7 @@ const Navbar = () => {
         <AiOutlineHeart size={20} className="cursor-pointer" />
         {user ? (
           <>
-            <NavLink to="cart"><FaBagShopping className="cursor-pointer text-white" size={23} /></NavLink>
+            <NavLink to="cart" className='relative'><span className="bg-red-500 text-white w-4 h-4 rounded-full flex justify-center items-center absolute -top-0 -right-2 text-sm">{user?.cart.length}</span><FaBagShopping className="cursor-pointer text-white" size={23} /></NavLink>
             <NavLink to="profile"><FaUser size={25} /></NavLink>
           </>
         ) : (

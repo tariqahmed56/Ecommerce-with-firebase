@@ -1,4 +1,5 @@
 import React, { useState , useEffect , memo, useCallback  , useContext} from 'react'
+import {productDataContext} from '../../contexts/ProductDataContext' 
 import Hero from '../../Components/Hero.jsx'
 import { Link } from 'react-router-dom'
 import Title from '../../Components/Navbar/Title.jsx'
@@ -8,10 +9,9 @@ import homeinterior from '../../assets/category/home-fashion.jpg'
 import Card from '../../Components/Card.jsx'
 import menCardImg from '../../assets/card.jpg'
 import womenCardImg from '../../assets/card1.jpg'
-import productDataContext from '../../contexts/ProductDataContext' 
 const Home = () => {
   let [visibility,setVisibilty] = useState(true);
-  const {productData} = useContext(ProductDataContext)
+  const {productData} = useContext(productDataContext)
   let scrollThreshold = 300;
   const scrollToTop = () => {
     window.scrollTo({
@@ -40,13 +40,13 @@ const Home = () => {
     id:1,
     name:"Men's Fashion",
     img: menFashion,
-    path: 'store/all-products/men-fashion'
+    path: 'store/men-fashion'
   },
   {
     id:2,
     name: "Women's Fashion",
     img:womenFashion,
-    path: 'store/all-products/men-fashion'
+    path: 'store/women-fashion'
   },
   
 ] 
@@ -69,19 +69,24 @@ const Home = () => {
      <div className="men py-10 grid gap-4">
       <Title genre="Men's"  intro="Find the perfect t-shirt, your new go-to sneakers and more right here."/>
       <div className="cards grid justify-items-center items-center lg:grid-cols-4 gap-4 md:grid-col-3  sm:grid-cols-2 mt-3 justify-center mx-[20px]">
-       {Array.from({length: 4}, (_,index)=> <Card genre="Men's Fashion" img={menCardImg} key={index + '@#$%FSC'}/>)}
+       {productData?.filter(item=>item.gender === "Male")?.slice(0,4)?.map(item=> <Link to={`store/men-fashion/${item.id}`}>
+        <Card genre="Men's Fashion" img={item.imageUrls[0]} key={item.id}/>
+       </Link>)}
       </div>
      </div>
      <div className="men py-10 grid gap-4 bg-black">
       <Title genre="Women's" textColor="text-white" intro="All the latest fashion trends and must-have products."/>
       <div className="cards grid justify-items-center items-center lg:grid-cols-4 gap-4 md:grid-col-3 sm:grid-cols-2 mt-3 justify-center mx-[20px]">
-       {Array.from({length: 4}, (_,index)=> <Card genre="Men's Fashion" key={index + '0349504&87(&(*&$&&%^'} img={womenCardImg} />)}
+       {productData?.filter(item=>item.gender === "Female")?.slice(0,4)?.map(item=><Link to={`store/women-fashion/${item.id}`}><Card genre="Men's Fashion" key={item.id} img={item.imageUrls[0]} /></Link>)}
       </div>
      </div>
      <div className="men py-10 grid gap-4 bg-white">
       <Title genre="Trending" textColor="text-black" intro="All the latest fashion trends and must-have products."/>
       <div className="cards grid justify-items-center items-center lg:grid-cols-4 gap-4 md:grid-col-3 sm:grid-cols-2 mt-3 justify-center mx-[20px]">
-       {Array.from({length: 4}, (_,index)=> <Card genre="Fashion Trends" key={index + "bgjsbveiwb"} img={womenCardImg} />)}
+       {productData?.slice(5,9)?.map(item=>{
+        let path = item.gender === "Male" ? `store/men-fashion/${item.id}` :`store/women-fashion/${item.id}`;
+        return <Link to={path}><Card genre="Fashion Trends" key={item.id} img={item.imageUrls[1]} /></Link>
+       })}
       </div>
      </div>
        <button 

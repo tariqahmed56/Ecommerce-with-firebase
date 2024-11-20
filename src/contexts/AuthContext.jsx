@@ -1,7 +1,7 @@
 import { createUserWithEmailAndPassword, onAuthStateChanged, sendEmailVerification ,signInWithEmailAndPassword, signOut , updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../config/firebaseconfig";
-import { addDoc, collection, doc, setDoc , getDoc } from "firebase/firestore";
+import { addDoc, collection, doc, setDoc , getDoc, onSnapshot } from "firebase/firestore";
 import Profile from "../Pages/Profile/Profile";
 
 export let AuthContext = createContext();
@@ -55,19 +55,26 @@ const changePassword = async (currentPassword, newPassword) => {
         signOut(auth);
         setUser(null)
        }
+      //  getUserData = async() =>{
+      //   const userRef = doc(db, "users", user.uid);
+      //   const userDoc = await getDoc(userRef);
+
+      //  }
+       
 
 
 const fetchUserById = async (documentId) => {
   try {
     const docRef = doc(db, "users", documentId);
-    const docSnap = await getDoc(docRef);
-
-    if (docSnap.exists()) {
-      setUser({ uid: docSnap.id, ...docSnap.data() })
-    } else {
-      return null;
-    }
-
+    const unsubscribe = onSnapshot(docRef, (snap) => {
+      if (snap.exists()) {
+        setUser({ uid: snap.id, ...snap.data() });
+      } else {
+        console.error("User is not logged In");
+        setUser(null); 
+      }
+    });
+     return unsubscribe;
   } catch (error) {
     console.error(error);
   }
