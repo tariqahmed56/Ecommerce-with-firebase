@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Input from '../../Components/Input'
 import Button from '../../Components/Button'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../contexts/AuthContext'
+import { productDataContext } from '../../contexts/ProductDataContext'
 const Signup = () => {
   const {CreateAccount} = useAuth();
+  const [error,setError] = useState('');
+  const { successMessage } = useContext(productDataContext);
+  const [isSubmitting, setIsSubmitting] = useState('');
   const [formData,setFormData] = useState({
     email: "",
     password: ""
@@ -19,6 +23,10 @@ const Signup = () => {
       return updatedState;
     })
   }
+  const handleSignUp = async ()=>{
+    setError('');
+    await CreateAccount(formData.email,formData.password, setError  , successMessage , setIsSubmitting) ;
+  }
 
   return (
     <div className='h-[90dvh] text-black flex justify-center items-center'>
@@ -28,17 +36,17 @@ const Signup = () => {
 <Input type='email' label='Email' name={'email'} onChange={handleChange}/>
 <Input type='password' label='password' name={'password'} onChange={handleChange}/>
 
-{/* <p className="text-red-500 text-xl font-bold mb-2"></p> */}
-
+{ error && <p className="text-red-500  font-medium mb-2">{error}</p>
+}
 <div className="text-center">
-<button onClick={()=>CreateAccount(formData.email,formData.password)}>Create Account</button>  
+<Button onClick={handleSignUp} text={'Create Account'} isSubmitting={isSubmitting}/>  
   <h3 className="text-xl font-bold mt-4 p-0">already have an Account?</h3>
   
   <Link
     className="border-0 m-0 py-3 text-xl underline hover:text-red-400 block"
     to="/login"
   >
-  then Login here
+  then Sign Here
   </Link>
 </div>
 </form>

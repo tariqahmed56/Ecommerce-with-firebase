@@ -38,10 +38,10 @@ const router = createBrowserRouter(
       <Route path="store/:category/:productId" element={<SingleProduct />} />
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
-      <Route path="cart" element={<Cart />} />
       <Route path="wishlist" element={<WishList />} />
 
       <Route element={<ForLoggedInUser />}>
+      <Route path="cart" element={<Cart />} /> 
         <Route path="profile" element={<Profile />}>
           <Route index element={<Active />} />
           <Route path="settings" element={<Settings />} />

@@ -69,15 +69,15 @@ const Home = () => {
      <div className="men py-10 grid gap-4">
       <Title genre="Men's"  intro="Find the perfect t-shirt, your new go-to sneakers and more right here."/>
       <div className="cards grid justify-items-center items-center lg:grid-cols-4 gap-4 md:grid-col-3  sm:grid-cols-2 mt-3 justify-center mx-[20px]">
-       {productData?.filter(item=>item.gender === "Male")?.slice(0,4)?.map(item=> <Link to={`store/men-fashion/${item.id}`}>
-        <Card genre="Men's Fashion" img={item.imageUrls[0]} key={item.id}/>
+       {productData?.filter(item=>item.gender === "Male")?.slice(0,4)?.map(item=> <Link to={`store/men-fashion/${item.id}`} key={item.id}>
+        <Card genre="Men's Fashion" img={item.imageUrls[0]}/>
        </Link>)}
       </div>
      </div>
      <div className="men py-10 grid gap-4 bg-black">
       <Title genre="Women's" textColor="text-white" intro="All the latest fashion trends and must-have products."/>
       <div className="cards grid justify-items-center items-center lg:grid-cols-4 gap-4 md:grid-col-3 sm:grid-cols-2 mt-3 justify-center mx-[20px]">
-       {productData?.filter(item=>item.gender === "Female")?.slice(0,4)?.map(item=><Link to={`store/women-fashion/${item.id}`}><Card genre="Men's Fashion" key={item.id} img={item.imageUrls[0]} /></Link>)}
+       {productData?.filter(item=>item.gender === "Female")?.slice(0,4)?.map(item=><Link to={`store/women-fashion/${item.id}`} key={item.id}><Card genre="Men's Fashion"  img={item.imageUrls[0]} /></Link>)}
       </div>
      </div>
      <div className="men py-10 grid gap-4 bg-white">
@@ -85,7 +85,7 @@ const Home = () => {
       <div className="cards grid justify-items-center items-center lg:grid-cols-4 gap-4 md:grid-col-3 sm:grid-cols-2 mt-3 justify-center mx-[20px]">
        {productData?.slice(5,9)?.map(item=>{
         let path = item.gender === "Male" ? `store/men-fashion/${item.id}` :`store/women-fashion/${item.id}`;
-        return <Link to={path}><Card genre="Fashion Trends" key={item.id} img={item.imageUrls[1]} /></Link>
+        return <Link to={path} key={item.id}><Card genre="Fashion Trends"  img={item.imageUrls[1]} /></Link>
        })}
       </div>
      </div>

@@ -80,7 +80,14 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
       {categoryDropdown && (
         <div className="flex flex-col py-2">
           {categories?.map((cat) => (
-            <Input type="checkbox" value={cat.category} name={"categories"} label={cat.category} key={cat.category} onChange={handleFilterChange}/>
+            <Input type="checkbox" 
+            value={cat.category} 
+            name={"categories"} 
+            label={cat.category} 
+            key={cat.category} 
+            onChange={handleFilterChange}
+            width={"w-auto"}
+            />
           ))}
         </div>
       )}
@@ -102,7 +109,14 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
         {brandsDropdown && (
           <div className="py-2">
             {brands.map((brand) => (
-              <Input type="checkbox" value={brand.brand} label={brand.brand} name="brands" key={brand.brand} onChange={handleFilterChange}/>
+              <Input type="checkbox" 
+              value={brand.brand} 
+              label={brand.brand}
+               name="brands" 
+               key={brand.brand} 
+               onChange={handleFilterChange}
+               width={"w-auto"}
+               />
             ))}
           </div>
         )}

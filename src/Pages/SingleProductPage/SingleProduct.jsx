@@ -11,7 +11,7 @@ const SingleProduct = () => {
   const { productId } = useParams();
   const {user} = useContext(AuthContext);
   const [Quantity,setQuantity] = useState(1);
-  const { productData } = useContext(productDataContext);
+  const { productData , successMessage} = useContext(productDataContext);
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [inStock,setInstock] = useState(true);
@@ -43,8 +43,6 @@ const SingleProduct = () => {
 
   
 async function addToCart() {
-  const userRef = doc(db, "users", user.uid);
-  const userDoc = await getDoc(userRef);
   let productDetails = {
     id:productId,
         title: product.title,
@@ -54,6 +52,11 @@ async function addToCart() {
          brand: product.brand,
          deliveryCharges:  Number(product.deliveryCharges)
   }
+  console.log(productDetails)
+
+       console.log(user)
+  const userRef = doc(db, "users", user.uid);
+  const userDoc = await getDoc(userRef);
   if (userDoc.exists()) {
     const userData = userDoc.data();
     let cart = userData.cart || [];
@@ -66,12 +69,12 @@ async function addToCart() {
       cart.push({...productDetails })
     }
  
+    successMessage("Product Successfully Added to Cart.");
     await updateDoc(userRef, { cart });
   } else {
-     let a = prompt("You need to login before using this feature.");
-     alert(a);
+        alert("please login first");
   }
-}
+};
 
   return product ? (
     <div className="min-h-[100vh] text-black px-4 py-6 md:px-10 flex flex-col md:flex-row gap-8">

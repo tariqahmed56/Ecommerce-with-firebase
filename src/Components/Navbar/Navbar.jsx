@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   AiOutlineHeart,
@@ -6,10 +6,10 @@ import {
 } from "react-icons/ai";
 import logo from '../../assets/logo.jpeg';
 import { FaBars, FaXmark, FaUser, FaBagShopping } from "react-icons/fa6";
-import { useAuth } from "../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 
 const Navbar = () => {
-  const { user } = useAuth();
+  const { user  } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleNavbar = () => setIsOpen((prev) => !prev);
@@ -40,20 +40,8 @@ const Navbar = () => {
         <li><NavLink to="store/men-fashion">Men's Fashion</NavLink></li>
         <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
         <li>
-          <div className="actions flex gap-4">
-            <AiOutlineHeart size={25} />
-            {user ? (
-              <NavLink to="profile"><FaUser size={25} /></NavLink>
-            ) : (
-              <NavLink to="login"><FaUser size={25} /></NavLink>
-            )}
-          </div>
         </li>
-        {user && (
-          <li>
-            <NavLink to="cart"><FaBagShopping size={20} className="text-white" /></NavLink>
-          </li>
-        )}
+       
       </ul>
 
       {/* Desktop Navigation */}
@@ -72,11 +60,11 @@ const Navbar = () => {
         <AiOutlineHeart size={20} className="cursor-pointer" />
         {user ? (
           <>
-            <NavLink to="cart" className='relative'><span className="bg-red-500 text-white w-4 h-4 rounded-full flex justify-center items-center absolute -top-0 -right-2 text-sm">{user?.cart.length}</span><FaBagShopping className="cursor-pointer text-white" size={23} /></NavLink>
+            <NavLink to="cart" className='relative'>{user.cart?.length > 0 && <span className="bg-red-500 text-white w-4 h-4 rounded-full flex justify-center items-center absolute -top-0 -right-2 text-sm">{user?.cart.length}</span>}<FaBagShopping className="cursor-pointer text-white" size={23} /></NavLink>
             <NavLink to="profile"><FaUser size={25} /></NavLink>
           </>
         ) : (
-          <NavLink to="login">Login</NavLink>
+          <NavLink to="login">login</NavLink>
         )}
       </div>
     </nav>

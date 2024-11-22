@@ -10,7 +10,7 @@ import {
 import { auth } from "../../config/firebaseconfig";
 import { useAuth } from "../../contexts/AuthContext";
 const Login = () => {
-  const { LoginUser , setUser , user , fetchUserById} = useAuth();
+  const { LoginUser , setUser , user , fetchUserById , error} = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -47,12 +47,12 @@ const Login = () => {
           />
           <Input
             type="password"
-            label="password"
+            label="Password"
             name={"password"}
             onChange={handleFormChange}
           />
 
-          {/* <p className="text-red-500 text-xl font-bold mb-2"></p> */}
+          {error && <p className="text-red-500 text-xl font-bold mb-2">{error}</p> }
           <div className="text-center">
             <Button text={"Login"} onClick={handleLogin} />
 

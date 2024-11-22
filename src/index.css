@@ -204,6 +204,14 @@ input[type="range"]::-webkit-slider-thumb {
 .hover-effect-bread-crums:hover{
   color: #302b2b;
 }
+.addresses{
+  opacity: 0;
+  transition: transform 300ms , opacity 200ms;
+}
+.hover-ul:hover .addresses{
+    opacity: 1;
+    transform: translateY(-12px);
+}
 /* input[type="checkbox"]{
   -webkit-appearance: none;
    padding: 0;

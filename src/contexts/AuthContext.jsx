@@ -3,27 +3,42 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { auth, db } from "../config/firebaseconfig";
 import { addDoc, collection, doc, setDoc , getDoc, onSnapshot } from "firebase/firestore";
 import Profile from "../Pages/Profile/Profile";
+import { useNavigate } from "react-router-dom";
 
 export let AuthContext = createContext();
 export const AuthContextProvider = ({children}) =>{
-
+    const navigate  = useNavigate();
     const [loading,setLoading] = useState(false);
     const [user,setUser] = useState(null);
-    const CreateAccount = async (email, password) => {
+    const [error,setError] = useState(null)
+    
+    const CreateAccount = async (email, password, setError , successMessage , setIsSubmitting ) => {
         try {
+          setIsSubmitting(true)
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
-            // console.log(userCredentials.user.uid); 
-            await setDoc(doc(db, "users", userCredentials.user.uid), {
-              email,
-              role:"user"
-              });
-            await sendEmailVerification(auth.currentUser); 
+            const userId = await userCredentials.user.uid;
+            
+            await sendEmailVerification(auth.currentUser);
+            successMessage("Account created! Verification email sent. Please check your inbox.");
+            await setDoc(doc(db, "users", userId), {
+                email,
+                role: "user",
+            });
+           setIsSubmitting(false)
+    
         } catch (error) {
-            console.error(error)
-            alert(error.message);
+            console.error(error);
+            setIsSubmitting(false);
+            if (error.code === "auth/email-already-in-use") {
+                setError("Email is already in use. If it's yours, please log in.");
+            } else if (error.code === "auth/weak-password") {
+                setError("Password is too weak. Please choose a stronger password.");
+            } else {
+                setError("An error occurred while creating your account. Please try again.");
+            }
         }
     };
-
+    
 const changePassword = async (currentPassword, newPassword) => {
   try {
     // firebase requires re-authentication for Security purposes, 
@@ -46,8 +61,11 @@ const changePassword = async (currentPassword, newPassword) => {
             let userinfo = userCredentials.user;
             setUser(userinfo);
             setLoading(false);
+            navigate('/profile');
         }).catch(err=>{
-            console.error(err.message);
+            console.error(err);
+            if(err.code === 'auth/invalid-credential') setError("Invalid credentials")
+            else setError(null)
             setLoading(false);
         })
        }
@@ -55,20 +73,15 @@ const changePassword = async (currentPassword, newPassword) => {
         signOut(auth);
         setUser(null)
        }
-      //  getUserData = async() =>{
-      //   const userRef = doc(db, "users", user.uid);
-      //   const userDoc = await getDoc(userRef);
-
-      //  }
-       
+   
 
 
-const fetchUserById = async (documentId) => {
+const fetchUserById = async(documentId)=> {
   try {
     const docRef = doc(db, "users", documentId);
     const unsubscribe = onSnapshot(docRef, (snap) => {
       if (snap.exists()) {
-        setUser({ uid: snap.id, ...snap.data() });
+        setUser({...snap.data() , uid:snap.id});
       } else {
         console.error("User is not logged In");
         setUser(null); 
@@ -82,7 +95,9 @@ const fetchUserById = async (documentId) => {
 
  
     return(
-        <AuthContext.Provider value={{loading,setLoading,user,setUser,CreateAccount,LoginUser,LogOut ,fetchUserById, changePassword }}>
+        <AuthContext.Provider value={
+          {loading,setLoading,user,setUser,CreateAccount,LoginUser, error,LogOut ,fetchUserById, changePassword   }
+          }>
             {children}
         </AuthContext.Provider>
     )

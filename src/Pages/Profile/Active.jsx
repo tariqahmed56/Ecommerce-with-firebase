@@ -1,33 +1,133 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../../contexts/AuthContext'
+import React, { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { FaEdit, FaSave } from "react-icons/fa";
+import { db } from "../../config/firebaseconfig";
+import { doc, updateDoc } from "firebase/firestore";
 
 const Active = () => {
-  const {user} = useContext(AuthContext);
-  // console.log(user)
-  return (
-<div className="contacts shadow-md flex flex-col justify-between gap-3 py-2 rounded-md border border-gray-400">
-  <h1 className="text-2xl px-4 ">Contacts</h1>
-  <div className="flex justify-between px-4 ">
-    <h1>Name</h1>
-    <h3 className="font-normal">Tariq Ahmed</h3>
-  </div>
-  <span className="w-[90%] h-[2px] bg-[#725b5b] block mx-auto"></span>
-  <div className="flex justify-between px-4">
-    <h1>Email</h1>
-    <h3 className="font-normal">{user?.email}</h3>
-  </div>
-  <span className="w-[90%] h-[2px] bg-[#725b5b] block mx-auto"></span>
-  <div className="flex justify-between px-4">
-    <h1>Mobile Number:</h1>
-    <h3 className="font-normal">3420198090</h3>
-  </div>
-  <span className="w-[90%] h-[2px] bg-[#725b5b] block mx-auto"></span>
-  <div className="flex justify-between px-4 flex-wrap">
-    <h1>Address</h1>
-    <h3 className="font-normal">Naveed Sodho house mithi sindh tharpakar Pakistan</h3>
-  </div>
-</div>
-  )
-}
+  const { user } = useContext(AuthContext);
+  const [edit, setEdit] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    mobileNumber: user.mobileNumber || "",
+  });
 
-export default Active
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        name: user.name || user?.email.split("@")[0] || "",
+        email: user?.email || "",
+        mobileNumber: user.mobileNumber || "",
+      });
+    }
+  }, [user]);
+
+  const handleEditIconClick = () => setEdit(true);
+
+  const handleSaveIconClick = async () => {
+    try {
+      setIsUpdating(true);
+      const userRef = doc(db, "users", user.uid);
+      await updateDoc(userRef, {
+        mobileNumber: formData.mobileNumber,
+        name: formData.name,
+      });
+      setIsUpdating(false);
+      setEdit(false);
+    } catch (error) {
+      setIsUpdating(false);
+      console.error(error);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  return (
+    <div className="contacts relative flex flex-col gap-6 py-6 px-4 bg-white shadow-md rounded-lg max-w-3xl mx-auto">
+      {/* Loader */}
+      {isUpdating && (
+        <div className="absolute z-20 w-full h-full inset-0 bg-black bg-opacity-50 flex justify-center items-center text-white text-xl font-bold">
+          Updating Data...
+        </div>
+      )}
+
+      <div className="relative flex flex-col gap-4">
+        {edit ? (
+          <FaSave
+            size={25}
+            onClick={handleSaveIconClick}
+            className="absolute right-3 top-3 text-gray-500 hover:text-green-500 cursor-pointer"
+          />
+        ) : (
+          <FaEdit
+            size={25}
+            onClick={handleEditIconClick}
+            className="absolute right-3 top-3 text-gray-500 hover:text-blue-500 cursor-pointer"
+          />
+        )}
+        <h1 className="text-xl font-semibold text-center text-gray-800 border-b pb-2">
+          Personal Information
+        </h1>
+        <div className="flex justify-between items-center">
+          <h2 className="text-gray-700">Name</h2>
+          {edit ? (
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              className="border border-gray-300 rounded px-2 py-1 w-1/2"
+            />
+          ) : (
+            <p className="text-gray-800">{formData.name}</p>
+          )}
+        </div>
+        <div className="border-t"></div>
+        <div className="flex justify-between items-center">
+          <h2 className="text-gray-700">Email</h2>
+          <p className="text-gray-800">{formData.email}</p>
+        </div>
+        <div className="border-t"></div>
+        <div className="flex justify-between items-center">
+          <h2 className="text-gray-700">Mobile Number</h2>
+          {edit ? (
+            <input
+              type="text"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleInputChange}
+              className="border border-gray-300 rounded px-2 py-1 w-1/2"
+            />
+          ) : (
+            <p className="text-gray-800">{formData.mobileNumber || "N/A"}</p>
+          )}
+        </div>
+      </div>
+
+      {user?.addresses && (
+        <div className="relative flex flex-col gap-4">
+          <h1 className="text-xl font-semibold text-center text-gray-800 border-b pb-2">
+            Delivery Addresses
+          </h1>
+          <ul className="space-y-4">
+            {user.addresses.map((address, index) => (
+              <li
+                key={index}
+                className="p-4 border border-gray-300 rounded bg-gray-50 shadow-sm"
+              >
+                <p className="text-gray-800">{address}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default Active;

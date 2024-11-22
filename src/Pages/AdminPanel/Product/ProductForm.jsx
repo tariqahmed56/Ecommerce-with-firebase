@@ -12,7 +12,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { productDataContext } from "../../../contexts/ProductDataContext";
 
 const ProductForm = ({ action, data }) => {
-  const {contextCategories} = useContext(productDataContext)
+  const {contextCategories, errorMessage , successMessage} = useContext(productDataContext)
 
   const [uploading, setUploading] = useState(false);
   const [PreviewImages, setPreviewImages] = useState(null);
@@ -90,30 +90,6 @@ const ProductForm = ({ action, data }) => {
     }
   };
 
-  const successMessage = () => {
-    toast.success("Product Successfully Added", {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
-  const ErrorMessage = (message) => {
-    toast.error(message, {
-      position: "top-right",
-      autoClose: 3000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-  };
-
   const AddFormData = async (e) => {
     e.preventDefault();
     setUploading(true);
@@ -137,7 +113,7 @@ const ProductForm = ({ action, data }) => {
       const productId = docRef.id;
       const imageUrls = await uploadProductImages(Files, productId);
       if (imageUrls.length === 0) {
-        ErrorMessage("Failed to upload images. Try again.");
+        errorMessage("Failed to upload images. Try again.");
         setUploading(false);
         return;
       }
@@ -150,7 +126,7 @@ const ProductForm = ({ action, data }) => {
 
       await setDoc(docRef, finalProductData);
 
-      successMessage();
+      successMessage('Product SuccessFully added.');
     } catch (error) {
       ErrorMessage("Something went wrong");
       console.error("Error saving document:", error);
@@ -166,7 +142,7 @@ const ProductForm = ({ action, data }) => {
   // Run This Function  Only , when the action is Add (action = Add)
   async function uploadProductImages(files, Id) {
     if (!files || files.length === 0) {
-      ErrorMessage("Please select images for the product.");
+      errorMessage("Please select images for the product.");
       return [];
     }
 
@@ -182,7 +158,7 @@ const ProductForm = ({ action, data }) => {
       //   console.log( imageUrls);
       return imageUrls;
     } catch (error) {
-      ErrorMessage("Error uploading images");
+      errorMessage("Error uploading images");
       console.error(error);
       return [];
     }
