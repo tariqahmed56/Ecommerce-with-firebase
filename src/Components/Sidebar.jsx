@@ -63,7 +63,7 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
   
   return (
     <div 
-    className={`md:min-w-[250px]  md:max-w-[320px] md:w-[320px] absolute ${isSideBarOpen ? '-left-[0%]' : '-left-[100%]'} transition-all  top-[60px] md:top-0 z-10 md:left-0 shadow-2xl md:shadow-none md:bg-none w-full px-5 text-black  pt-4 py-10 mt-12 bg-white md:relative  min-h-[100dvh]`}>
+    className={`md:min-w-[250px]  md:max-w-[320px] md:w-[320px] font-outfit font-normal absolute ${isSideBarOpen ? '-left-[0%]' : '-left-[100%]'} transition-all  top-[60px] md:top-0 z-10 md:left-0 shadow-2xl md:shadow-none md:bg-none w-full px-5 text-black  pt-4 py-10 mt-12 bg-white md:relative  min-h-[100dvh]`}>
       <FaX 
       onClick={closeSideBar}
        size={30}

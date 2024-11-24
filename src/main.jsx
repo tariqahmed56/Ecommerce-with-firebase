@@ -30,6 +30,7 @@ import AddCategory from './Pages/AdminPanel/Categories/AddCategory.jsx';
 import CategoryList from './Pages/AdminPanel/Categories/CategoryList.jsx';
 import ForLoggedInUser from './Components/Protection/ForLoggedInUser.jsx';
 import PrivateRoutes from './Components/Protection/PrivateRoutes.jsx';
+import PlaceOrder from './Pages/PlaceOrder/PlaceOrder.jsx';
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<MainLayout />}>
@@ -39,7 +40,7 @@ const router = createBrowserRouter(
       <Route path="login" element={<Login />} />
       <Route path="signup" element={<Signup />} />
       <Route path="wishlist" element={<WishList />} />
-
+      <Route path='check-out' element={<PlaceOrder/>}/>
       <Route element={<ForLoggedInUser />}>
       <Route path="cart" element={<Cart />} /> 
         <Route path="profile" element={<Profile />}>

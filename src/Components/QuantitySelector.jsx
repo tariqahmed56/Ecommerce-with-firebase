@@ -5,7 +5,6 @@ const QuantitySelector = ({maxValue , isSizeSelected , setError , value , setVal
   function Increament(){
     //Error Case
     if(!isSizeSelected){
-      alert('some')
       setError("Please Select a Size");
       return;
     }else{

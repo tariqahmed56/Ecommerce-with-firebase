@@ -55,28 +55,33 @@ const Settings = () => {
   }
   console.log(user)
   return (
-    <div className="contacts shadow-md flex flex-col  gap-3 py-2 rounded-md  px-3 relative">
+    <div className="contacts  flex flex-col items-center justify-center  gap-3 py-2 rounded-md  px-3 relative">
       <form onSubmit={(e)=>e.preventDefault()} className='flex flex-col gap-2 px-0 md:px-5'>
-        <fieldset className='border border-gray-300 px-3 rounded py-2'>
-          <legend className='font-normal text-xl px-2'>
-          Change Password
+        <fieldset className=' px-3 rounded py-2'>
+          <legend className='font-normal text-xl px-2 uppercase'>
+          <span className='text-gray-500 '>Change </span>Password
           </legend>
-      <Input type='password' label={'Old password'} value={passwords.oldPassword} width={'w-full'} placeholder='Old Password' name={'oldPassword'} onChange={handlepasswordsChange}/>
-      <Input type='password' label={'New Password'} value={passwords.newPassword} placeholder='New Password' name={'newPassword'} onChange={handlepasswordsChange}/>
-       <Button onClick={()=>changePassword(passwords.oldPassword,passwords.newPassword)} text={'Save Changes'}/>
+      <Input type='password' width='w-[400px] min-w-[250px] max-w-[400px]' label={'Old password'} value={passwords.oldPassword} placeholder='Old Password' name={'oldPassword'} onChange={handlepasswordsChange}/>
+      <Input type='password' width='w-[400px] min-w-[250px] max-w-[400px]' label={'New Password'} value={passwords.newPassword} placeholder='New Password' name={'newPassword'} onChange={handlepasswordsChange}/>
+       <div className="mt-2">
+       <Button  onClick={()=>changePassword(passwords.oldPassword,passwords.newPassword)} text={'Save Changes'}/>
+       </div>
         </fieldset>
         <h1 className='font-play text-xl font-semibold text-center leading-3 p-0 m-0 py-3 relative'><span className='inline-block w-1/3 h-[1px] bg-[#656060]  relative  mx-2 -top-[6px] '></span>OR <span className="inline-block w-1/3 h-[1px] bg-[#777373] relative mx-2 -top-[6px]"></span></h1>
       </form>
          <form action="#" className='px-0 md:px-5'>
-          <fieldset className='border border-gray-300 px-3 rounded'>
-          <legend className='text-xl font-regular  py-2 px-2'>Add Address</legend>
+          <fieldset className=' px-3 rounded'>
+          <legend className='text-xl font-regular  py-2 px-2 uppercase'> <span className='text-gray-500 '>Add New</span> Delivery Address</legend>
           <textarea name="Address" id="Address" value={address} onChange={HandleAddressChange}
            placeholder='Add your Address'
             maxLength={100} minLength={30}
              rows={5}
              required
-             className='w-[80%] border rounded px-3 py-2 outline-none'/>
+             className='w-[80%] md:w-[300px] border rounded px-3 py-2 outline-none'/>
+             <div className="mt-2">
+
            <Button text={"Submit"} onClick={HandleAddressSubmit} isSubmitting={isSubmitting}/>
+             </div>
           </fieldset>
 
          </form>

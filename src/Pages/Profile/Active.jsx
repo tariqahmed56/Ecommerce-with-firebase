@@ -48,7 +48,7 @@ const Active = () => {
   };
 
   return (
-    <div className="contacts relative flex flex-col gap-6 py-6 px-4 bg-white shadow-md rounded-lg max-w-3xl mx-auto">
+    <div className="contacts relative flex flex-wrap container justify-between gap-[50px] py-3 px-4 bg-white rounded-lg  mx-auto">
       {/* Loader */}
       {isUpdating && (
         <div className="absolute z-20 w-full h-full inset-0 bg-black bg-opacity-50 flex justify-center items-center text-white text-xl font-bold">
@@ -56,22 +56,22 @@ const Active = () => {
         </div>
       )}
 
-      <div className="relative flex flex-col gap-4">
+      <div className="relative flex flex-col gap-4  md:basis-1/3 w-full">
         {edit ? (
           <FaSave
             size={25}
             onClick={handleSaveIconClick}
-            className="absolute right-3 top-3 text-gray-500 hover:text-green-500 cursor-pointer"
+            className="absolute right-3 text-gray-500 hover:text-green-500 cursor-pointer"
           />
         ) : (
           <FaEdit
             size={25}
             onClick={handleEditIconClick}
-            className="absolute right-3 top-3 text-gray-500 hover:text-blue-500 cursor-pointer"
+            className="absolute right-3  text-gray-500 hover:text-blue-500 cursor-pointer"
           />
         )}
-        <h1 className="text-xl font-semibold text-center text-gray-800 border-b pb-2">
-          Personal Information
+        <h1 className="text-xl font-semibold text-left text-gray-800 border-b pb-2 uppercase">
+         <span className="text-gray-500">Personal</span> Information
         </h1>
         <div className="flex justify-between items-center">
           <h2 className="text-gray-700">Name</h2>
@@ -110,9 +110,9 @@ const Active = () => {
       </div>
 
       {user?.addresses && (
-        <div className="relative flex flex-col gap-4">
-          <h1 className="text-xl font-semibold text-center text-gray-800 border-b pb-2">
-            Delivery Addresses
+        <div className="relative flex flex-col gap-4  md:basis-1/3 w-full">
+          <h1 className="text-xl font-semibold text-left text-gray-800 border-b pb-2 uppercase">
+          <span className="text-gray-500">Delivery</span> Addresses
           </h1>
           <ul className="space-y-4">
             {user.addresses.map((address, index) => (

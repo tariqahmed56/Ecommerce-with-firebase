@@ -43,6 +43,14 @@ const SingleProduct = () => {
 
   
 async function addToCart() {
+  if(!selectedSize){
+    setError('Please Select a size.');
+    return;
+  }
+  if(!user){
+    alert("Please Login First.");
+    return;
+  }
   let productDetails = {
     id:productId,
         title: product.title,
@@ -54,7 +62,6 @@ async function addToCart() {
   }
   console.log(productDetails)
 
-       console.log(user)
   const userRef = doc(db, "users", user.uid);
   const userDoc = await getDoc(userRef);
   if (userDoc.exists()) {
@@ -77,24 +84,24 @@ async function addToCart() {
 };
 
   return product ? (
-    <div className="min-h-[100vh] text-black px-4 py-6 md:px-10 flex flex-col md:flex-row gap-8">
-      <div className="w-full md:w-[50%] flex flex-col lg:flex-row-reverse items-center gap-4">
-        <div className="md:h-[500px] h-auto md:w-[70%] flex  justify-center items-center bg-[#717070]">
+    <div className="min-h-[100vh] text-black px-4 py-6 md:px-10 justify-center flex flex-col md:flex-row gap-8">
+      <div className="w-full md:w-[50%] flex flex-col items-center lg:flex-row-reverse md:items-start  py-10">
+        <div className="md:h-[500px] relative h-auto md:w-[70%] flex  justify-center items-center bg-white">
         <img
           ref={mainImageRef}
           src={product?.imageUrls[0]}
           alt="Main image"
-          className="w-full h-auto max-h-[500px] object-contain shadow-lg "
+          className="w-full h-auto max-h-[500px] object-contain mix-blend-multiply"
         />
         </div>
-        <div className="flex lg:flex-col gap-3 overflow-x-auto mx-2 p-2">
+        <div className="flex lg:flex-col gap-3 overflow-x-auto mx-2 p-2 ">
           {product?.imageUrls.map((img, index) => (
             <img
               key={index}
               src={img}
               alt="Thumbnail"
               onClick={handleImageClick}
-              className="w-[80px] h-[80px] object-cover rounded-lg shadow-md cursor-pointer hover:ring-2 hover:ring-black"
+              className="w-[80px] h-[80px] object-cover shadow-md cursor-pointer hover:ring-2 hover:ring-black "
             />
           ))}
         </div>

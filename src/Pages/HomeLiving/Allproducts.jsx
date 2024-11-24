@@ -83,24 +83,26 @@ const Allproducts = React.memo(() => {
   }
 
   return (
-    <div className="text-black min-h-screen flex flex-col px-[30px]">
+    <div className="text-black min-h-screen flex flex-col px-[30px]  ">
       {/* Breadcrumbs */}
-      <div className=" font-light flex text-black gap-3 py-7">
-        <Link to="/store/all-product" className="hover-effect-bread-crums font-play text-xl tracking-[5px] pb-2"> store</Link>
-        {category === 'men-fashion' ? (
-          <Link to="/store/men-fashion" className="hover-effect-bread-crums font-play text-xl tracking-[5px] pb-2"> Men Fashion</Link>
-        ) : category === 'women-fashion' ? (
-          <Link to="/store/women-fashion" className="hover-effect-bread-crums font-play text-xl tracking-[5px] pb-2"> Women Fashion</Link>
-        ) : null}
+      <div className=" font-light flex text-black gap-x-10 gap-y-5 py-7 flex-wrap">
+        <Link to="/store/all-product"
+         className="hover-effect-bread-crums font-play  text-xl tracking-[5px] md:pb-2 leading-3 text-nowrap"> store</Link>
+          <Link to="/store/men-fashion"
+           className="hover-effect-bread-crums font-play text-xl tracking-[5px] md:pb-2 leading-3 text-nowrap"> Men Fashion</Link>
+          <Link to="/store/women-fashion" 
+          className="hover-effect-bread-crums font-play text-xl tracking-[5px] md:pb-2 leading-3 text-nowrap"> Women Fashion</Link>
+        
       </div>
 
       <div className="main-containt flex w-full">
         <Sidebar closeSideBar={HandleSideBar} isSideBarOpen={isSideBarOpen}  gender={gender} allCategories={contextCategories} genre="Categories" filters={filters} setFilters={setFilters} />
-        <div className="flex flex-col gap-6  w-full">
-          <div className="w-full flex justify-evenly md:justify-end px-5">
-            <button onClick={HandleSideBar} className='block md:hidden px-10 py-1 border  text-black font-play tracking-[5px] text-xl rounded-sm'>filters</button>
+        <div className="flex  gap-6  w-full flex-wrap">
+          <div className="w-full flex justify-center gap-2 flex-wrap md:justify-end px-5">
+            <button onClick={HandleSideBar} className='block md:hidden px-[60px] py-3 border  text-black font-play tracking-[5px] text-xl rounded-sm'>filters</button>
             <select
-              className="sort-select px-3 py-3 outline-none border cursor-pointer font-play tracking-[3px] text-xl rounded-sm"
+              className="sort-select px-3 py-3 outline-none border cursor-pointer
+               font-play tracking-[3px] text-xl rounded-sm"
               onChange={HandleSortChange}
               ref={selectRef}
             >
