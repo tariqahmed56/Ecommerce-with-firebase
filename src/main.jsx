@@ -23,7 +23,6 @@ import Orders from './Pages/Profile/Orders.jsx';
 import AdminLayout from './Pages/AdminPanel/AdminLayout.jsx';
 import Dashboard from './Pages/AdminPanel/Dashboard.jsx';
 import AdminOrders from './Pages/AdminPanel/AdminOrders.jsx';
-import Users from './Pages/AdminPanel/Users.jsx';
 import AddProduct from './Pages/AdminPanel/Product/AddProduct.jsx';
 import ProductList from './Pages/AdminPanel/Product/ProductList.jsx';
 import AddCategory from './Pages/AdminPanel/Categories/AddCategory.jsx';
@@ -54,7 +53,6 @@ const router = createBrowserRouter(
         <Route path="admin-panel" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<AdminOrders />} />
-          <Route path="users" element={<Users />} />
           <Route path="add-product" element={<AddProduct />} />
           <Route path="product-list" element={<ProductList />} />
           <Route path="add-category" element={<AddCategory />} />

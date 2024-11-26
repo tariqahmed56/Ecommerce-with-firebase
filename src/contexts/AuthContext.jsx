@@ -55,10 +55,11 @@ const changePassword = async (currentPassword, newPassword) => {
 };
 
 
-       const LoginUser =async (userEmail,userPassword) => {
+       const LoginUser = async (userEmail,userPassword) => {
         setLoading(true);
         signInWithEmailAndPassword(auth,userEmail,userPassword).then(userCredentials=>{
             let userinfo = userCredentials.user;
+            localStorage.setItem("user",JSON.stringify(userinfo))
             setUser(userinfo);
             setLoading(false);
             navigate('/profile');
@@ -71,6 +72,7 @@ const changePassword = async (currentPassword, newPassword) => {
        }
        const LogOut = () => {
         signOut(auth);
+        localStorage.clear();
         setUser(null)
        }
    
@@ -92,7 +94,7 @@ const fetchUserById = async(documentId)=> {
     console.error(error);
   }
 };
-
+ 
  
     return(
         <AuthContext.Provider value={

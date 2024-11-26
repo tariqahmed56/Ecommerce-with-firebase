@@ -7,7 +7,7 @@ const AdminLayout = () => {
     setSidebarExpanded(false);
   }
   return (
-    <div className='min-h-[100dvh] text-black flex relative'>
+    <div className='min-h-screen text-black flex relative'>
      <AdminNav isSidebarExpanded={isSidebarExpanded} setSidebarExpanded={setSidebarExpanded}/>
      <div className="bg-[#0F172A] w-full" onClick={handleClick}>
       <Outlet />

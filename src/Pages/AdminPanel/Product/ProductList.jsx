@@ -23,49 +23,41 @@ const ProductList = () => {
     readData();
   }, [])
   return (
-    <div className='w-full text-white overflow-x-scroll sm:overflow-x-auto p-4'>
-    <table className='bg-slate-900 shadow-md min-w-[600px] sm:w-[90%] mx-auto px-3 rounded-[30px] border border-gray-500'>
-  <tr className='bg-[#2e2e53] rounded'>
-    <th className='py-2 border border-gray-600 text-center'>S.No</th>
-    <th className='py-2 border border-gray-600 text-center'>ID</th>
-    <th className='py-2 border border-gray-600 text-center'>Name</th>
-    <th className='py-2 border border-gray-600 text-center'>Price</th>
-    <th className='py-2 border border-gray-600 text-center'>Stock</th>
-    <th className='py-2 border border-gray-600 text-center'>Gender</th>
-    <th className='py-2 border border-gray-600 text-center'>Brand</th>
-    <th className='py-2 border border-gray-600 text-center'>Edit</th>
-    <th className='py-2 border border-gray-600 text-center'>Delete</th>
-  </tr>
-  {products?.map((item, idx) => (
-    <tr key={idx} className={`py-2 ${idx % 2 === 0 ? "bg-slate-700" : "bg-slate-500"}`}>
-        <TableRow  value={idx+1} maxWidth={"50px"}/>
-        <TableRow  value={item.id} maxWidth={"100px"} />
-        <TableRow  value={item.title} maxWidth={"150px"} />
-        <TableRow value={item.price} maxWidth={"70px"} />
-        <TableRow value={item.variants.reduce((acc,curr)=>acc+ Number(curr.stock),0)} maxWidth={"70px"}/>
-        <TableRow value={item.gender} maxWidth={"70px"} />
-        <TableRow value={item.brand} maxWidth={"70px"} />
-        <TableRow value={"Edit"} maxWidth={"70px"} id={item.id}/>
-        <TableRow value={"Delete"} maxWidth={"70px"} id={item.id}/>
-    </tr>
-  ))}
-</table>
-    </div>
+    <div className="grid gap-2">
+    <div className="grid border-none font-bold text-white mx-2 grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm">
+       <p>Img</p>
+       <p>title</p>
+       <p>Category</p>
+       <p>Price</p>
+       <p className="text-right md:text-center cursor-pointer text-lg">X</p>
+     </div>
+     {products?.map((item)=>(
+        <div className="grid text-white mx-2 grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm">
+        <img 
+          className="w-12" 
+          src={item.imageUrls[0]} 
+          alt={item.title} 
+        />
+        <p>{item.title}</p>
+        <p>{item.category}</p>
+        <p>{item.price}</p>
+        <p className="text-right md:text-center cursor-pointer text-lg" onClick={()=>DeleteProduct(item.id)}>X</p>
+      </div>
+     ))}
+       <div className="grid text-white mx-2 grid-cols-[1fr_3fr_1fr] md:grid-cols-[1fr_3fr_1fr_1fr_1fr] items-center gap-2 py-1 px-2 border text-sm">
+       <img 
+         className="w-12" 
+         src="https://raw.githubusercontent.com/avinashdm/gs-images/main/forever/p_img47.png" 
+         alt="" 
+       />
+       <p>Kid Tapered Slim Fit Trouser</p>
+       <p>Kids</p>
+       <p>$38</p>
+       <p className="text-right md:text-center cursor-pointer text-lg">X</p>
+     </div>
+   
+       </div>
   )
 }
 
 export default ProductList
-
-  function TableRow({value,maxWidth , id}){
-
-   function Edit(){
-    console.log("Product with Id " + id + " Edited");
-   }
-   function Delete(){
-    console.log(`Product with ${id} Deleted `)
-   }
-   return <td className='text-center py-2 overflow-hidden text-ellipsis whitespace-nowrap px-2' 
-   onClick={value === 'Delete' || value === "Edit" ? value === 'Edit' ? ()=> Edit() : ()=>Delete() : null  }
-   style={{ maxWidth: maxWidth }}>{value}</td>
-
-  }

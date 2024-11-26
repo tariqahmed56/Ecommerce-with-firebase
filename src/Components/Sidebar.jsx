@@ -77,8 +77,8 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
           <FaChevronDown size={15} />
         </span>
       </h1>
-      {categoryDropdown && (
-        <div className="flex flex-col py-2">
+       
+        <div className={`flex flex-col py-2 ${categoryDropdown ? "opacity-100 pointer-events-auto h-auto" : "h-0 opacity-0 pointer-events-none"}`}>
           {categories?.map((cat) => (
             <Input type="checkbox" 
             value={cat.category} 
@@ -90,7 +90,7 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
             />
           ))}
         </div>
-      )}
+      
       
       <div className="">
         <PriceRange setFilter={setFilters}/>
@@ -106,8 +106,8 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
             <FaChevronDown size={15} />
           </span>
         </h1>
-        {brandsDropdown && (
-          <div className="py-2">
+        
+          <div className={`py-2 ${brandsDropdown ? "opacity-100 pointer-events-auto h-auto" : "h-0 opacity-0 pointer-events-none"}`}>
             {brands.map((brand) => (
               <Input type="checkbox" 
               value={brand.brand} 
@@ -119,7 +119,6 @@ const Sidebar = ({ genre , allCategories , gender , setFilters , filters , close
                />
             ))}
           </div>
-        )}
       </div>
     </div>
   );

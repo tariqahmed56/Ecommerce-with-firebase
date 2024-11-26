@@ -2,18 +2,18 @@ import React, { useContext, useEffect, useState } from 'react';
 import Input from '../../Components/Input';
 import { AuthContext } from '../../contexts/AuthContext';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { doc, updateDoc , collection,  setDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc , collection,  setDoc, serverTimestamp, getDoc } from 'firebase/firestore';
 import { db } from '../../config/firebaseconfig';
 import { productDataContext } from '../../contexts/ProductDataContext';
+import Button from '../../Components/Button';
 
 const PlaceOrder = () => {
     const {user} = useContext(AuthContext);
     const {successMessage , errorMessage} = useContext(productDataContext)
-    console.log(user.uid)
     const location = useLocation();
     const navigate = useNavigate();
+    const [loading,setLoading] = useState(false)
     const {shippingCost , price } = location.state
-    console.log(user.cart)
     const [formData,setFormData] = useState({
         email: "",
         name: "" ,
@@ -54,33 +54,35 @@ const PlaceOrder = () => {
     };
 
 const addOrder = async (orderData, userId) => {
-  try {
-    const userOrdersRef = collection(db, 'orders', userId, 'orders');
-    const userInfoRef = doc(db,'users', user.uid);
+ try {
+  const userRef = doc(db, "users", userId);
+  const userDoc = await getDoc(userRef);
+  const userData = userDoc.data()
+    let newOrderData =  {
+    products: orderData.products,          
+    shippingAddress: orderData.shippingAddress, 
+    totalPrice: orderData.totalPrice,      
+    shippingCost: orderData.shippingCost, 
+    phone: orderData.phone,   
+    paymentMethod: "COD",     
+    status: 'pending',                     
+    createdAt: Date.now(),          
+    updatedAt: Date.now(),   
 
-    const newOrderRef = doc(userOrdersRef); 
-    setDoc(newOrderRef, {
-      products: orderData.products,          
-      shippingAddress: orderData.shippingAddress, 
-      totalPrice: orderData.totalPrice,      
-      shippingCost: orderData.shippingCost, 
-      phone: orderData.mobileNumber,   
-      paymentMethod: "COD",     
-      status: 'pending',                     
-      createdAt: serverTimestamp(),          
-      updatedAt: serverTimestamp(),   
+  }
+  
+  if(userData.orders){
+     let updatedOrders = [...userData.orders , newOrderData];
+     await updateDoc(userRef,{cart:[],orders:updatedOrders});
+   }else{
+    let updatedOrders = [newOrderData];
+    await updateDoc(userRef,{cart:[],orders:updatedOrders});
 
-    }).then(()=>{
-         updateDoc(userInfoRef,{cart:[]});
-    }).then(()=>{
-        successMessage('Order completed successfully.')
-        navigate('/profile/orders');
+   }
 
-    })
-
-  } catch (error) {
-     errorMessage('Something Went Wrong pleasr Try Again.')
-}
+ } catch (error) {
+  console.error(error)
+ }
 };
 
 
@@ -114,13 +116,13 @@ const addOrder = async (orderData, userId) => {
               <p className="text-gray-500 text-sm font-medium">CASH ON DELIVERY</p>
             </div>
           </div>
-          <div className="w-full mt-8">
-            <button
-              type="submit"
-              className="bg-black w-full text-white px-16 py-3 rounded text-sm hover:bg-gray-800"
-            >
-              PLACE ORDER
-            </button>
+          <div className="w-full mt-8 flex justify-center">
+            <Button 
+            text={'PLACE ORDER'}
+            isSubmitting={loading}
+            />
+              
+            
           </div>
         </div>
       </div>

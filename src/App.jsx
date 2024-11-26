@@ -10,7 +10,7 @@ import { auth, db } from "./config/firebaseconfig";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/Navbar/Footer";
 import { productDataContext } from "./contexts/ProductDataContext";
-import { collection, doc, onSnapshot } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 function App() {
   const [userId, setUserId] = useState(null);
   const {
@@ -22,6 +22,10 @@ function App() {
      } = useContext(productDataContext);
      const {user,setUser} = useContext(AuthContext)
   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser({...storedUser , cart:[] , orders:[]});
+    }
     const cleanUp = onAuthStateChanged(auth, (isLoggedInUser) => {
       if(isLoggedInUser){
 

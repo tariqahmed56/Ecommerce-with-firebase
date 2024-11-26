@@ -7,7 +7,7 @@ import Sidebar from '../../Components/Sidebar';
 import ProductCard from '../../Components/ProductCard';
 import ProductsLoader from '../../Components/PlaceHolderLoaders/ProductsLoader';
 import Button from '../../Components/Button'
-const Allproducts = React.memo(() => {
+const Allproducts = () => {
   const { contextCategories, productData, setProductData, productLoading, setProductLoading } = useContext(productDataContext);
   const location = useLocation();
   const { category } = useParams();
@@ -64,17 +64,19 @@ const Allproducts = React.memo(() => {
     checkBoxes.forEach((checkbox)=>{
       checkbox.checked = false;
     });
-   selectRef.current.value = "Sort By"
+   selectRef.current = "Sort By"
   }, [location.pathname]);
 
 
   const HandleSortChange = (event) => {
-    const sortType =  event.target.value;
-
+    const sortType =  event.target?.value;
+   if(sortType){
+    selectRef.current = sortType;
+   }
+   console.log(selectRef)
     const sortedData = [...filteredData];
     if (sortType === 'High to Low') sortedData.sort((a, b) => Number(b.price) - Number(a.price));
     else if (sortType === 'Low to High') sortedData.sort((a, b) => Number(a.price) - Number(b.price));
-
     setFilteredData(sortedData);
   };
   const [isSideBarOpen,setIsSideBarOpen] = useState(false);
@@ -92,18 +94,19 @@ const Allproducts = React.memo(() => {
            className="hover-effect-bread-crums font-play text-xl tracking-[5px] md:pb-2 leading-3 text-nowrap"> Men Fashion</Link>
           <Link to="/store/women-fashion" 
           className="hover-effect-bread-crums font-play text-xl tracking-[5px] md:pb-2 leading-3 text-nowrap"> Women Fashion</Link>
-        
+  
       </div>
 
-      <div className="main-containt flex w-full">
+      <div className="main-containt flex justify-start items-start w-full">
         <Sidebar closeSideBar={HandleSideBar} isSideBarOpen={isSideBarOpen}  gender={gender} allCategories={contextCategories} genre="Categories" filters={filters} setFilters={setFilters} />
-        <div className="flex  gap-6  w-full flex-wrap">
-          <div className="w-full flex justify-center gap-2 flex-wrap md:justify-end px-5">
-            <button onClick={HandleSideBar} className='block md:hidden px-[60px] py-3 border  text-black font-play tracking-[5px] text-xl rounded-sm'>filters</button>
+        <div className="flex  gap-6  w-full flex-wrap ">
+          <div className="w-full flex justify-center items-start gap-2 flex-wrap md:justify-end px-5">
+            <button onClick={HandleSideBar}
+             className='block md:hidden px-[60px] py-3 border  text-black font-play tracking-[5px] text-xl rounded-sm'>filters</button>
             <select
-              className="sort-select px-3 py-3 outline-none border cursor-pointer
-               font-play tracking-[3px] text-xl rounded-sm"
+              className="sort-select text-black  px-3 py-3 outline-none border cursor-pointer font-play tracking-[3px] text-xl rounded-sm"
               onChange={HandleSortChange}
+              value={selectRef.current}
               ref={selectRef}
             >
               <option value="Sort By" className="cursor-pointer uppercase">SORT BY PRICE</option>
@@ -112,7 +115,7 @@ const Allproducts = React.memo(() => {
             </select>
           </div>
 
-          <div className="products flex flex-wrap gap-5 items-center justify-center pb-7">
+          <div className="products flex  flex-wrap gap-5 md:px-3  pb-7">
             {productLoading ? (
               <ProductsLoader />
             ) : (
@@ -136,6 +139,6 @@ const Allproducts = React.memo(() => {
       </div>
     </div>
   );
-});
+}
 
 export default Allproducts;

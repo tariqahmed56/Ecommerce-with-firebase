@@ -53,14 +53,13 @@ const AddCategory = () => {
         <option className='bg-slate-800' value={''}>Select Gender</option>
         <option className='bg-slate-800' value={'Male'}>Male</option>
         <option className='bg-slate-800' value={'Female'}>Female</option>
-        <option className='bg-slate-800' value={'Neuter'}>For Both</option>
        </select>
         <Input type="text" label="category" width={'w-[400px]'} 
         name={"category"} value={FormData.category} onChange={ChangeHandler}
         placeholder='Type Category Name ... '
-        className='bg-transparent text-white border-gray-300 border rounded'
+        className='bg-transparent text-white mb-2 border-gray-300 border rounded'
         />
-        <Button text={"Add Category"} onClick={HandleForm}/>
+        <Button text={"Add Category"} width={'100%'} onClick={HandleForm}/>
       </form>
     </div>
   )

@@ -6,17 +6,20 @@ import QuantitySelector from "../../Components/QuantitySelector";
 import { doc, setDoc, updateDoc ,getDoc} from "firebase/firestore"; 
 import { db } from "../../config/firebaseconfig";
 import { AuthContext } from "../../contexts/AuthContext";
+import OrdersLoader from "../../Components/PlaceHolderLoaders/OrdersLoader";
+import Button from "../../Components/Button";
 
 const SingleProduct = () => {
   const { productId } = useParams();
   const {user} = useContext(AuthContext);
   const [Quantity,setQuantity] = useState(1);
-  const { productData , successMessage} = useContext(productDataContext);
+  const { productData , successMessage , errorMessage} = useContext(productDataContext);
   const [product, setProduct] = useState(null);
   const [selectedSize, setSelectedSize] = useState("");
   const [inStock,setInstock] = useState(true);
   const mainImageRef = useRef();
   const [error,setError] = useState('');
+  const [adding,setAdding] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0); // Scroll to top on component mount
@@ -39,8 +42,6 @@ const SingleProduct = () => {
   const handleImageClick = (e) => {
     mainImageRef.current.src = e.target.src;
   };
-  console.log(product)
-
   
 async function addToCart() {
   if(!selectedSize){
@@ -60,11 +61,11 @@ async function addToCart() {
          brand: product.brand,
          deliveryCharges:  Number(product.deliveryCharges)
   }
-  console.log(productDetails)
-
-  const userRef = doc(db, "users", user.uid);
+   try {
+    const userRef = doc(db, "users", user.uid);
   const userDoc = await getDoc(userRef);
   if (userDoc.exists()) {
+    setAdding(true)
     const userData = userDoc.data();
     let cart = userData.cart || [];
       
@@ -76,11 +77,14 @@ async function addToCart() {
       cart.push({...productDetails })
     }
  
-    successMessage("Product Successfully Added to Cart.");
     await updateDoc(userRef, { cart });
-  } else {
-        alert("please login first");
-  }
+    successMessage("Product Successfully Added to Cart.");
+    setAdding(false);
+  } 
+   } catch (error) {
+    errorMessage('Something Went Wrong.')
+   }
+  
 };
 
   return product ? (
@@ -116,7 +120,7 @@ async function addToCart() {
         <h1 className="text-xl font-semibold">{product?.title}</h1>
 
         <p className="text-lg font-semibold text-gray-800">
-          PKR{" "}
+          PKR
           {selectedSize
             ? product.variants.find((variant) => variant.size === selectedSize).price
             : product?.price}
@@ -157,12 +161,12 @@ async function addToCart() {
           {selectedSize && <p>Available stock : {product.variants.find(variant=>variant.size === selectedSize).stock}</p>}
           {!inStock && <p className="text-red-500 font-play font-bold">Out of Stock</p>}
         <div className="flex gap-4 items-center">
-          <button 
+          <Button 
           disabled={!inStock}
           onClick={addToCart}
-          className="w-full md:w-auto px-6 py-3 bg-black text-white rounded-lg shadow-lg hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-[#504e4e]">
-            Add to Cart
-          </button>
+          text={'Add to Cart'}
+          isSubmitting={adding}
+          />            
           <CiHeart size={30} className="text-gray-700 cursor-pointer hover:text-black" />
         </div>
 
@@ -173,9 +177,7 @@ async function addToCart() {
       </div>
     </div>
   ) : (
-    <div className="flex justify-center items-center min-h-[100vh]">
-      <div className="w-8 h-8 border-4 border-gray-300 border-t-black rounded-full animate-spin"></div>
-    </div>
+   <OrdersLoader/>
   );
 };
 

@@ -18,7 +18,6 @@ const Cart = () => {
   const [shippingCost,setShippingCost] = useState(0);
   const [SelectedAddress, setSelectedAddress] = useState('')
   const [dropdownOpen,setDropdownOpen] = useState(false)
-    // console.log(user)
   useEffect(()=>{
     setCart(()=>{
       let value = user?.cart || [];
@@ -61,13 +60,13 @@ if(!cart.length){
   }
  
   return (
-    <div className="cart px-4 md:container md:mx-auto text-black min-h-[90dvh] gap-6 flex  flex-wrap-reverse md:flex-wrap flex-row-reverse py-6 ">
+    <div className="cart w-full px-4 md:container md:mx-auto text-black min-h-[90dvh] gap-6 flex  md:flex-wrap-reverse flex-wrap flex-row py-6 ">
       
-      <div className="Cart-Products col-span-2 md:p-6 mx-auto bg-[#f7f7f7] rounded-lg shadow-lg ">
+      <div className="Cart-Products w-full col-span-2 md:p-6 mx-auto bg-[#f7f7f7] rounded-lg shadow-lg basis-3/4">
         {cart?.map((item,index)=>(
-          <div key={index} className="Product relative flex border mb-2 border-black flex-wrap md:flex-nowrap w-[90vw] sm:w-[100%]  gap-4 justify-center items-center md:justify-start md:items-start shadow-md px-6 py-4 bg-white rounded-lg">
+          <div key={index} className="Product relative flex border mb-2 border-black flex-wrap  gap-4 justify-center items-center md:justify-start md:items-start shadow-md px-6 py-4 bg-white rounded-lg">
           <div className="img relative  flex justify-center items-center border rounded-md overflow-hidden">
-            <img src={item.imageUrls[0]} alt="Product" className="md:w-20 md:h-20 w-30 h-30 mix-blend-multiply object-cover" />
+            <img src={item.imageUrls[0]} alt="Product" className="w-20 h-20 mix-blend-multiply object-cover" />
           </div>
           <div className="Data flex flex-col gap-y-1 justify-start items-start px-4">
             <div className="title text-lg font-normal text-black text-wrap">
@@ -90,11 +89,11 @@ if(!cart.length){
       <div className="Cart-Summary flex-1 shadow-lg bg-white p-6 rounded-lg w-[90vw] md:w-auto ">
        
        <div className="location flex flex-col gap-4 relative">
-   <h3 className="text-sm font-medium text-gray-600">Location</h3>
+   <h3 className="text-sm font-medium text-gray-600 relative">Location</h3>
    <div className="text text-sm flex gap-3 items-center">
      <FaLocationPinLock color="#6b7280" />
      <p className="text-sm text-black">{SelectedAddress}</p>
-     <div className="relative">
+     <div className="">
      {user?.addresses?.length > 0 &&
        <button 
          className="text-xs text-blue-400 hover:underline" 
@@ -104,7 +103,7 @@ if(!cart.length){
        </button>
          }
        {dropdownOpen && (
-         <ul className="absolute top-full mt-2 right-0 bg-white shadow-md w-[300px] rounded-lg border border-gray-300 z-10">
+         <ul className="absolute top-0 mt-2 left-0 bg-white shadow-md w-[300px] rounded-lg border border-gray-300 z-10">
            {user?.addresses.map((address, index) => (
              <li
                key={index}

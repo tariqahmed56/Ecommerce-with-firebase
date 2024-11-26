@@ -10,7 +10,7 @@ import {
 import { auth } from "../../config/firebaseconfig";
 import { useAuth } from "../../contexts/AuthContext";
 const Login = () => {
-  const { LoginUser , setUser , user , fetchUserById , error} = useAuth();
+  const { LoginUser , setUser , user , fetchUserById , error , loading} = useAuth();
 
   const [formData, setFormData] = useState({
     email: "",
@@ -28,7 +28,6 @@ const Login = () => {
   };
   const handleLogin = async (e) => {
     LoginUser(formData.email, formData.password);
-    console.log(formData)
   };
   
   return (
@@ -53,8 +52,8 @@ const Login = () => {
           />
 
           {error && <p className="text-red-500 text-xl font-bold mb-2">{error}</p> }
-          <div className="text-center">
-            <Button text={"Login"} onClick={handleLogin} />
+          <div className="text-center mt-2">
+            <Button text={"Login"} onClick={handleLogin} isSubmitting={loading}/>
 
             <h3 className="text-xl font-bold mt-4 p-0">New Customer?</h3>
 

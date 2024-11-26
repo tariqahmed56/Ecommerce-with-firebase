@@ -25,10 +25,7 @@ li{
 .desktop-hover-effect li a{
   position: relative;
 }
-/* 
- clientId: "52cea5ec58604ca3b30e63bfef674d16";
- clientSecretId: "bb6f073184b74017878cdb5daf55d786"
-*/
+
 .desktop-hover-effect li  a::after{
   content: '';
   width: 100%;
