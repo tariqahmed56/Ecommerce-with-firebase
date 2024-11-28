@@ -34,4 +34,3 @@ vite.config.js
 
 # Ignore environment and configuration files
 .env
-src/config/firebaseconfig.js
