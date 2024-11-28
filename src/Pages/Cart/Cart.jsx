@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import '../../index.css'
 import emptyCart from '../../assets/empty-cart.webp';
-import dummyProduct from '../../assets/dummyProduct.webp';
 import { FaLocationPinLock, FaTrashArrowUp } from 'react-icons/fa6';
 import QuantitySelector from '../../Components/QuantitySelector';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +16,6 @@ const Cart = () => {
   const [price,setPrice] = useState(0);
   const [shippingCost,setShippingCost] = useState(0);
   const [SelectedAddress, setSelectedAddress] = useState('')
-  const [dropdownOpen,setDropdownOpen] = useState(false)
   useEffect(()=>{
     setCart(()=>{
       let value = user?.cart || [];
@@ -102,24 +100,7 @@ if(!cart.length){
            Change Address
        </button>
          }
-       {dropdownOpen && (
-         <ul className="absolute top-0 mt-2 left-0 bg-white shadow-md w-[300px] rounded-lg border border-gray-300 z-10">
-           {user?.addresses.map((address, index) => (
-             <li
-               key={index}
-               onClick={() => {
-                 setSelectedAddress(address);
-                 setDropdownOpen(false);
-               }}
-               className={`text-xs py-2 px-3 cursor-pointer hover:bg-gray-100 ${
-                 SelectedAddress === address ? "bg-gray-200 font-semibold" : ""
-               }`}
-             >
-               {address}
-             </li>
-           ))}
-         </ul>
-       )}
+     
      </div>
    </div>
    <hr className="bg-gray-500 w-[90%]" />

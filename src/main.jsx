@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 import MainLayout from './MainLayout/MainLayout.jsx';
 import Home from './Pages/Home/Home.jsx';
-import Allproducts from './Pages/HomeLiving/Allproducts.jsx';
+import Allproducts from './Pages/shop/Allproducts.jsx';
 import SingleProduct from './Pages/SingleProductPage/SingleProduct.jsx';
 import Login from './Pages/Auth/Login.jsx';
 import Signup from './Pages/Auth/Signup.jsx';

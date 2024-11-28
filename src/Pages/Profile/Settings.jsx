@@ -39,10 +39,10 @@ const Settings = () => {
       if(address){
         let userAddressArr = userData.addresses || [];
         await updateDoc(userRef,{addresses:[...userAddressArr , address]});
-        // await updateDoc(userRef,{addresses:['Sodha boys Hostel Umerkot near boys degree college umerkot']}); //for Testing
+        // await updateDoc(userRef,{addresses:['Sodha boys Hostel Umerkot near boys degree college umerkot']}); 
         setIsSubmitting(false);
         successMessage('Address Added SuccessFully');
-        // throw new Error('error')
+        // throw new Error('error')   //test
       }
 
     }
@@ -56,7 +56,6 @@ const Settings = () => {
   console.log(user)
   return (
     <div className="contacts flex flex-col items-center justify-center gap-6 py-6 px-4 sm:px-6 md:px-8 lg:px-12">
-  {/* Password Change Form */}
   <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-6 w-full max-w-lg">
     <fieldset className="border border-gray-300 rounded-md px-6 py-4 shadow-sm">
       <legend className="font-medium text-lg sm:text-xl px-4 uppercase text-gray-600">
@@ -87,7 +86,6 @@ const Settings = () => {
       </div>
     </fieldset>
 
-    {/* Divider */}
     <h1 className="font-medium text-lg text-center text-gray-500 relative flex items-center">
       <span className="flex-1 h-[1px] bg-gray-300"></span>
       <span className="px-4">OR</span>
@@ -95,7 +93,6 @@ const Settings = () => {
     </h1>
   </form>
 
-  {/* Add New Address Form */}
   <form action="#" className="w-full max-w-lg">
     <fieldset className="border border-gray-300 rounded-md px-6 py-4 shadow-sm">
       <legend className="font-medium text-lg sm:text-xl px-4 uppercase text-gray-600">

@@ -2,12 +2,11 @@ import React, { useState , useEffect , memo, useCallback  , useContext} from 're
 import {productDataContext} from '../../contexts/ProductDataContext' 
 import Hero from '../../Components/Hero.jsx'
 import { Link } from 'react-router-dom'
-import Title from '../../Components/Navbar/Title.jsx'
+import Title from '../../Components/Title.jsx'
 import menFashion from '../../assets/category/men-fashion.jpg'
 import Card from '../../Components/Card.jsx'
 import womenFashion from '../../assets/category/women-fashion.jpg'
 import homeinterior from '../../assets/category/home-fashion.jpg'
-import womenCardImg from '../../assets/card1.jpg'
 const Home = () => {
   let [visibility,setVisibilty] = useState(true);
   const {productData} = useContext(productDataContext)

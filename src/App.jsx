@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth, db } from "./config/firebaseconfig";
 import Navbar from "./Components/Navbar/Navbar";
-import Footer from "./Components/Navbar/Footer";
+import Footer from "./Components/Footer.jsx"
 import { productDataContext } from "./contexts/ProductDataContext";
 import { collection, doc, getDocs, onSnapshot } from "firebase/firestore";
 function App() {

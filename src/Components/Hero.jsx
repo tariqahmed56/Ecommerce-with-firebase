@@ -1,5 +1,5 @@
 import React from "react";
-import menHero from "../assets/home-fashion.jpg";
+// import menHero from "../assets/home-fashion.jpg";
 import { BiSearch } from "react-icons/bi";
 import PriceRange from "./PriceRange";
 import Carousel from '../Components/Carousel';
@@ -8,7 +8,9 @@ import men2 from '../assets/menswiper/men-style.webp'
 import women1 from '../assets/women-fashion.jpg'
 import women2 from '../assets/women-style.webp'
 import Button from "./Button";
-const Hero = ({ imgUrl = menHero }) => {
+import { useNavigate } from "react-router-dom";
+const Hero = ({ imgUrl }) => {
+  const navigate = useNavigate()
   const style = {
     height: "calc(100dvh - 56px)",
     backgroundImage: `url(${imgUrl})`,
@@ -31,6 +33,9 @@ const Hero = ({ imgUrl = menHero }) => {
       url:women2
     }
   ]
+  const HandleClick = () => {
+       navigate('/store/all-product')
+  }
   return (
     <div className={`bg-cover bg-right sm:bg-auto flex flex-col justify-center items-center relative bg-[#211f1f] pb-6`}>
       <Carousel images={images}/>
@@ -45,7 +50,7 @@ const Hero = ({ imgUrl = menHero }) => {
       <input type="text" placeholder="search..." className="z-20 mt-3 bg-transparent border border-gray-500 min-h-8 text-white tracking-wider uppercase rounded-full w-full md:py-2 md:px-3 px-5 py-6 outline-none " id="search"/>
       <BiSearch className="absolute right-3 text-white top-[40%] z-20"  size={30}/>
       </label>
-       <button className="sm:hidden block uppercase font-play tracking-widest text-xl cursor-pointer   text-black bg-white shadow-emerald-500 shadow-md  rounded-sm z-20 px-5 py-2 w-[250px] mt-5 hover:translate-y-2 hover:shadow-sm transition-all">Shop Now</button>
+       <button onClick={HandleClick} className="sm:hidden block uppercase font-play tracking-widest text-xl cursor-pointer   text-black bg-white shadow-emerald-500 shadow-md  rounded-sm z-20 px-5 py-2 w-[250px] mt-5 hover:translate-y-2 hover:shadow-sm transition-all">Shop Now</button>
     </div>
   );
 };

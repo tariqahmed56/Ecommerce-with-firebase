@@ -5,6 +5,7 @@ import { addDoc, collection, doc } from 'firebase/firestore';
 import { db } from '../../../config/firebaseconfig.js';
 const AddCategory = () => {
   let [Error , setError] = useState('');
+  let [isSubmitting,setIsSubmitting] = useState(false);
   let [FormData,setFromData] = useState({
     gender: "",
     category: ""
@@ -12,11 +13,18 @@ const AddCategory = () => {
   const HandleForm = async (e) => {
     e.preventDefault();
     if(isValid()){
-      const collectionRef =collection(db,`categories`);
+      try {
+        setIsSubmitting(true);
+        const collectionRef =collection(db,`categories`);
       await addDoc(collectionRef, {...FormData});
+      setIsSubmitting(false)
       console.log(FormData);
+      } catch (error) {
+        setIsSubmitting(false)
+        alert('something Went Wrong, Check Your Internet and Try again.')
+      }
     }else{
-      alert(Error)
+      alert("All fields are required")
     }
   }
   const ChangeHandler = (e) => {

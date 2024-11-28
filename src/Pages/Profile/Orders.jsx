@@ -8,7 +8,7 @@ import { FaCross, FaX } from 'react-icons/fa6';
 const Orders = () => {
   const { user } = useContext(AuthContext);
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
@@ -36,6 +36,17 @@ const Orders = () => {
   }, [user?.uid]);
 
   const closeModal = () => setSelectedOrder(null);
+  const formatDate = (dateInMilliSecond) =>{
+   let formatedDate = new Date(dateInMilliSecond).toLocaleString(undefined, {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    return formatedDate;
+    
+  }
 
   return (
     <div className="font-outfit">
@@ -46,20 +57,20 @@ const Orders = () => {
       <div className="space-y-4">
         {loading ? (
          Array.from({length:4}).map(index=> <OrdersLoader key={index}/>)
-        ) : orders.length > 0 ? (
-          orders.map((order, index) => (
+        ) : user?.orders?.length > 0 ? (
+          user?.orders?.map((order, index) => (
             <div
               key={index}
               className="py-4 border-t border-b text-gray-700 flex flex-col md:items-start md:start gap-4"
             >
               <div className='relative text-gray-600  w-full flex flex-wrap gap-4'>
                 <p className="text-sm ">
-                  Order ID: <span className="font-medium text-green-400">{order.id}</span>
+                  Order ID: <span className="font-medium text-green-400">{order.orderId}</span>
                 </p>
                 <p>
-                  Date:
-                  <span className=" text-green-400">
-                    {new Date(order.createdAt.seconds * 1000).toDateString()}
+                  Date: 
+                  <span className="mx-1 text-green-400">
+                    {formatDate(order.createdAt)}
                   </span>
                 </p>
                 <p>
@@ -68,12 +79,7 @@ const Orders = () => {
                 <p>
                   Status: <span className="text-green-400 capitalize">{order.status}</span>
                 </p>
-                <button
-                  className="border absolute top-2 right-0 px-4 md:px-10 py-2 text-sm font-medium rounded-sm bg-green-500 hover:bg-transparent text-white hover:text-black"
-                  onClick={() => setSelectedOrder(order)}
-                >
-                  View
-                </button>
+              
               </div>
               <div>
                 {order.products.map((product, productIndex) => (
@@ -93,14 +99,23 @@ const Orders = () => {
                         <p>Quantity: {product.Quantity}</p>
                         <p>Size: {product.variant.size}</p>
                       </div>
+                      <button
+                  className="border mt-3  px-4 md:px-10 py-2 text-sm font-medium rounded-sm bg-green-500 hover:bg-transparent text-white hover:text-black"
+                  onClick={() => setSelectedOrder(order)}
+                >
+                  View
+                </button>
                     </div>
+                   
                   </div>
                 ))}
+                
               </div>
+            
             </div>
           ))
         ) : (
-          <p>No Orders Yet</p>
+          <p className='text-lg text-center'>No Orders Yet</p>
         )}
       </div>
 
@@ -108,7 +123,7 @@ const Orders = () => {
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center ">
           <div className="bg-white rounded-md shadow-lg max-w-lg w-full p-6 space-y-4 relative">
             <h2 className="text-lg font-bold text-gray-800">Order Details</h2>
-            <p><strong>Order ID:</strong> {selectedOrder.id}</p>
+            <p><strong>Order ID:</strong> {selectedOrder.orderId}</p>
             <p><strong>Status:</strong> {selectedOrder.status}</p>
             <p>
               <strong>Shipping Address:</strong> {selectedOrder.shippingAddress}

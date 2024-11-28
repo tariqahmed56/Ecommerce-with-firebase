@@ -1,5 +1,4 @@
 import React from "react";
-import product from "../assets/dummyProduct.webp";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FaCartArrowDown, FaCartPlus } from "react-icons/fa6";
 import { Link, redirect, useNavigate } from "react-router-dom";

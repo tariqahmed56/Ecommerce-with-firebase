@@ -18,17 +18,7 @@ const Navbar = () => {
       navigate('/')
   }
   const toggleNavbar = () => setIsOpen((prev) => !prev);
-  const debounce = (fun,delay) =>{
-    let timerId ;
-    return (...args) =>{
-      clearTimeout(timerId);
-    timerId = setTimeout(()=>fun(...args),delay);
-    }
-  }
-  const handleInput = (e) => {
-    console.log(e.target.value);
-  };
-  const debouncedInputHandler = debounce(handleInput,400);
+
 
 
   return (
@@ -44,8 +34,7 @@ const Navbar = () => {
         <li><NavLink to={`store/all-product`}>Shop</NavLink></li>
         <li><NavLink to="store/men-fashion">Men's Fashion</NavLink></li>
         <li><NavLink to="store/women-fashion">Women's Fashion</NavLink></li>
-        <li>
-        </li>
+         {user?.role === 'admin' && <li><NavLink to='admin-panel'>Dashboard</NavLink></li>}
        
       </ul>
 
@@ -66,7 +55,7 @@ const Navbar = () => {
           <>
            <div className="Link relative group">
             <NavLink to="profile"><FaUser size={25} /></NavLink>
-            <div className="UserProfileSideBar translate-y-8 translate-x-[60px] transition-all group-hover:translate-y-2 group-hover:opacity-100 opacity-0 pointer-events-none group-hover:pointer-events-auto  -left-[170px] top-8 z-30 rounded-md w-[200px] absolute  bg-gray-100 p-4 flex flex-col gap-4 text-gray-700 border-r-2 border-gray-200 shadow-inner">
+            <div className="UserProfileSideBar translate-y-8 translate-x-[60px] transition-all group-hover:translate-y-0 group-hover:opacity-100 opacity-0 pointer-events-none group-hover:pointer-events-auto  -left-[170px] top-8 z-30 rounded-md w-[200px] absolute  bg-gray-100 p-4 flex flex-col gap-4 text-gray-700 border-r-2 border-gray-200 shadow-inner">
            <div className="absolute h-6 w-6 left-[53%] bg-gray-100 rotate-45 -translate-y-6"></div>
           <Link to="profile" className="px-4 py-2 font-medium text-gray-700 hover:bg-gray-200 hover:text-black rounded-lg">
             Contacts
