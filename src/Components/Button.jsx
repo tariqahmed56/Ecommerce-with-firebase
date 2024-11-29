@@ -1,10 +1,10 @@
 import React from "react";
 
-const Button = ({ onClick, text , isSubmitting}) => {
+const Button = ({ onClick, text , isSubmitting , theme}) => {
   return (
     <button
     disabled={isSubmitting !== undefined ? isSubmitting : false}
-    className={`bg-black text-white flex justify-center items-center px-4 py-2 max-w-[300px] min-w-[80px] w-[250px]  rounded-md hover:border-black border-2
+    className={`bg-black text-white flex justify-center ${theme && theme} items-center px-4 py-2 max-w-[300px] min-w-[80px] w-[250px]  rounded-md hover:border-black border-2
      hover:bg-white hover:text-black ${isSubmitting ? "cursor-not-allowed text-2xl tracking-widest": " " } `} onClick={onClick}>
      {isSubmitting ? "..." : text}
     </button>
