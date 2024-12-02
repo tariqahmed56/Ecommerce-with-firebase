@@ -9,7 +9,7 @@ import {
 } from "react-share";
 
 const SocialShare = ({ productUrl, productName }) => {
-  const shareUrl = productUrl;
+  const shareUrl = window.location.href;
   const title = productName;
 
   return (
